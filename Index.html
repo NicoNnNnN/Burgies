@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>HellFire Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 4rem 1rem;
+      text-align: center;
+    }
+
+    h1 {
+      color: red;
+      margin-bottom: 2rem;
+    }
+
+    input, button {
+      padding: 1rem;
+      margin: 0.
+
+Super, wir starten direkt mit der **Verknüpfung der Dateien**, damit alles perfekt funktioniert. Ich werde die Schritte und den Code so klar wie möglich machen, damit du einfach loslegen kannst!
+
+### **Was wir erstellen**:
+1. **Startseite (`index.html`)**: Passwortabfrage, um zur Home-Seite zu gelangen.
+2. **Home-Seite (`home.html`)**: Ein Menüpunkt zum Adminbereich, Passwortabfrage für den Adminbereich.
+3. **Adminbereich (`admin.html`)**: Passwortgeschützt, um Events zu erstellen und zu bearbeiten.
+4. **Eventseite (`events.html`)**: Tipper können ihre Tipps abgeben, Events werden angezeigt.
+
+### **Verknüpfung zwischen den Seiten**:
+- Daten (Events, Tipps) werden im **localStorage** gespeichert.
+- Die Seiten **kommunizieren miteinander** und greifen auf die gespeicherten Daten zu.
+- **Navigation** zwischen den Seiten funktioniert per **Passwortabfrage** und Weiterleitung.
+
+---
+
+### 1. **Startseite (`index.html`) – Passwortabfrage**
+
+Diese Seite fordert den Benutzer auf, ein Passwort einzugeben, um zur **Home-Seite** zu gelangen.
+
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>HellFire Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 4rem 1rem;
+      text-align: center;
+    }
+
+    h1 {
+      color: red;
+      margin-bottom: 2rem;
+    }
+
+    input, button {
+      padding: 1rem;
+      margin: 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+      box-sizing: border-box;
+    }
+
+    input {
+      background-color: #333;
+      color: #fff;
+    }
+
+    button {
+      background-color: red;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #statusMessage {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Willkommen zur HellFire Webapp!</h1>
+  <p>Gib das Passwort ein, um fortzufahren:</p>
+  <input type="password" id="passwordInput" placeholder="Passwort">
+  <button onclick="checkPassword()">Weiter</button>
+  <p id="statusMessage"></p>
+
+  <script>
+    function checkPassword() {
+      const password = document.getElementById("passwordInput").value;
+      const message = document.getElementById("statusMessage");
+
+      if (password === "HellfireFLN2025") {
+        window.location.href = "home.html"; // Weiterleitung zur Home-Seite
+      } else {
+        message.innerText = "Falsches Passwort!";
+        message.style.color = "red";
+      }
+    }
+  </script>
+</body>
+</html>
