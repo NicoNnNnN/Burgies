@@ -16,38 +16,45 @@
     .container {
       width: 90%;
       max-width: 400px;
-      margin: 5vh auto 0 auto;
+      margin: 8vh auto 0 auto;
       text-align: center;
+    }
+
+    .headline-wrapper {
       position: relative;
+      display: inline-block;
+      margin-bottom: 2rem;
     }
 
     h1 {
       color: red;
       font-size: 2.8rem;
-      margin-bottom: 1rem;
-      position: relative;
-      display: inline-block;
+      margin: 0;
     }
 
     .members-label {
       position: absolute;
-      top: -15px;
-      right: -20px;
-      transform: rotate(10deg);
+      top: -12px;
+      right: 5px;
+      transform: rotate(8deg);
       font-family: 'Courier New', monospace;
       color: #ccc;
       font-size: 1rem;
       opacity: 0.8;
     }
 
+    p {
+      margin-bottom: 1rem;
+    }
+
     input,
     button {
       width: 100%;
       padding: 1rem;
-      margin-top: 1rem;
       font-size: 1rem;
       border: none;
       border-radius: 5px;
+      box-sizing: border-box;
     }
 
     input {
@@ -59,6 +66,7 @@
       background-color: red;
       color: white;
       font-weight: bold;
+      margin-top: 1rem;
       cursor: pointer;
     }
 
@@ -70,7 +78,7 @@
 </head>
 <body>
   <div class="container">
-    <div style="position: relative; display: inline-block;">
+    <div class="headline-wrapper">
       <h1>HellFire</h1>
       <div class="members-label">Members</div>
     </div>
