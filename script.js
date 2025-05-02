@@ -1,14 +1,12 @@
-
 function checkPassword() {
-    const correctPassword = "HellfireFLN2025";
-    const entered = document.getElementById("accessPassword").value;
-    const message = document.getElementById("message");
+    const password = document.getElementById("passwordInput").value;
+    const message = document.getElementById("statusMessage");
 
-    if (entered === correctPassword) {
+    if (password === "HellfireFLN2025") {
+        message.innerText = "Zugang erlaubt! (Hier beginnt deine Webapp)";
         message.style.color = "green";
-        message.innerText = "Zugang erlaubt. (Ab hier geht später die App los)";
     } else {
+        message.innerText = "Falsches Passwort!";
         message.style.color = "red";
-        message.innerText = "Falsches Passwort. Versuch es nochmal.";
     }
 }
