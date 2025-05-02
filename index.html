@@ -2,104 +2,42 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>HellFire Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Burgie Webapp</title>
   <style>
     body {
       background-color: #000;
       color: #fff;
       font-family: sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      width: 90%;
-      max-width: 400px;
-      margin: 8vh auto 0 auto;
       text-align: center;
-    }
-
-    .headline-wrapper {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 2rem;
+      padding: 4rem 1rem;
     }
 
     h1 {
       color: red;
-      font-size: 2.8rem;
-      margin: 0;
+      margin-bottom: 2rem;
     }
 
-    .members-label {
-      position: absolute;
-      top: -12px;
-      right: 5px;
-      transform: rotate(8deg);
-      font-family: 'Courier New', monospace;
-      color: #ccc;
-      font-size: 1rem;
-      opacity: 0.8;
-    }
-
-    p {
-      margin-bottom: 1rem;
-    }
-
-    input,
-    button {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-
-    input {
-      background-color: #333;
-      color: #fff;
-    }
-
-    button {
+    a.button {
+      display: inline-block;
       background-color: red;
       color: white;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      margin: 1rem;
+      border-radius: 8px;
       font-weight: bold;
-      margin-top: 1rem;
-      cursor: pointer;
+      font-size: 1.2rem;
     }
 
-    #statusMessage {
-      margin-top: 1rem;
-      font-weight: bold;
+    a.button:hover {
+      background-color: #c00;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="headline-wrapper">
-      <h1>HellFire</h1>
-      <div class="members-label">Members</div>
-    </div>
-    <p>Gib das Passwort ein, um fortzufahren:</p>
-    <input type="password" id="passwordInput" placeholder="Passwort" />
-    <button onclick="checkPassword()">Weiter</button>
-    <p id="statusMessage"></p>
-  </div>
-
-  <script>
-    function checkPassword() {
-      const password = document.getElementById("passwordInput").value;
-      const message = document.getElementById("statusMessage");
-
-      if (password === "HellfireFLN2025") {
-        window.location.href = "home.html";
-      } else {
-        message.innerText = "Falsches Passwort!";
-        message.style.color = "red";
-      }
-    }
-  </script>
+  <h1>🔥 Burgie Webapp 🔥</h1>
+  <a class="button" href="events.html">Zur Tippseite</a>
+  <a class="button" href="admin.html">Zum Adminbereich</a>
 </body>
 </html>
