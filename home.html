@@ -1,19 +1,122 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>Willkommen</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 50px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>HellFire Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 200px;
+      background-color: #111;
+      padding: 2rem 1rem;
+      box-sizing: border-box;
+      height: 100vh;
+    }
+
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: red;
+    }
+
+    .nav-link {
+      display: block;
+      margin: 1rem 0;
+      color: #ccc;
+      text-decoration: none;
+    }
+
+    .nav-link:hover {
+      color: red;
+    }
+
+    .main {
+      flex-grow: 1;
+      padding: 2rem;
+    }
+
+    .username-box {
+      max-width: 400px;
+      margin: 5vh auto;
+      background-color: #1a1a1a;
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #333;
+      color: #fff;
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 1rem;
+      width: 100%;
+      background-color: red;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #greeting {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      color: #0f0;
+    }
+  </style>
 </head>
 <body>
-    <h1>Willkommen in der Burgie Webapp!</h1>
-    <p>Hier kommt als Nächstes: Benutzername, Events, Burgies...</p>
+  <div class="sidebar">
+    <h2>☰ Menü</h2>
+    <a class="nav-link" href="#">🏠 Start</a>
+    <a class="nav-link" href="#">📅 Events</a>
+    <a class="nav-link" href="#">🏆 Rangliste</a>
+  </div>
+
+  <div class="main">
+    <div class="username-box">
+      <h2>Willkommen bei HellFire</h2>
+      <p>Wie möchtest du heißen?</p>
+      <input type="text" id="usernameInput" placeholder="Dein Name">
+      <button onclick="saveUsername()">Speichern</button>
+      <p id="greeting"></p>
+    </div>
+  </div>
+
+  <script>
+    function saveUsername() {
+      const name = document.getElementById("usernameInput").value.trim();
+      if (name) {
+        localStorage.setItem("burgieUser", name);
+        document.getElementById("greeting").innerText = `Hallo ${name}, willkommen zurück!`;
+      }
+    }
+
+    window.onload = function () {
+      const savedName = localStorage.getItem("burgieUser");
+      if (savedName) {
+        document.getElementById("usernameInput").style.display = "none";
+        document.querySelector("button").style.display = "none";
+        document.getElementById("greeting").innerText = `Hallo ${savedName}, willkommen zurück!`;
+      }
+    }
+  </script>
 </body>
 </html>
