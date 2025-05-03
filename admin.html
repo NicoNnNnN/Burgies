@@ -43,42 +43,24 @@
     .event { background: #111; padding: 1rem; margin: 1rem 0; border-radius: 5px; }
     .edit-buttons { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
     .edit-buttons button { flex: 1; padding: 0.5rem; }
-
-    /* Linkes Menü */
-    .menu {
-      position: fixed;
-      right: 10px;
-      top: 10px;
-      background-color: #111;
-      padding: 10px;
-      border-radius: 8px;
+    /* Passwortschutz */
+    .password-container {
+      text-align: center;
+      padding: 50px;
     }
-
-    .menu a {
-      display: block;
-      color: white;
-      text-decoration: none;
-      padding: 8px;
-    }
-
-    .menu a:hover {
-      background-color: red;
-    }
-
   </style>
 </head>
 <body>
-  <!-- Linkes Menü -->
-  <div class="sidebar">
-    <h2>Menü</h2>
-    <a href="home.html" class="nav-link">🏠 Home</a>
-    <a href="events.html" class="nav-link">📅 Events</a>
-    <a href="ranklist.html" class="nav-link">🏆 Rangliste</a>
-    <a href="admin.html" class="nav-link">🔒 Adminbereich</a>
+  <!-- Passwortschutz -->
+  <div class="password-container" id="password-container">
+    <h2>Admin Login</h2>
+    <input type="password" id="adminPw" placeholder="Admin-Passwort">
+    <button onclick="checkPassword()">Login</button>
+    <p id="loginMessage"></p>
   </div>
 
   <!-- Adminbereich -->
-  <div class="container">
+  <div class="container" id="adminContainer" style="display: none;">
     <h1>Burgie Adminbereich</h1>
 
     <h2>Neues Event hinzufügen</h2>
@@ -92,7 +74,25 @@
   </div>
 
   <script>
-    // Prüfen, ob bereits Events im Local Storage gespeichert sind
+    // Passwort für den Adminbereich
+    const adminPassword = "admin2025";
+
+    // Prüfen, ob das Passwort korrekt ist
+    function checkPassword() {
+      const enteredPassword = document.getElementById("adminPw").value;
+      const message = document.getElementById("loginMessage");
+
+      if (enteredPassword === adminPassword) {
+        document.getElementById("password-container").style.display = "none";
+        document.getElementById("adminContainer").style.display = "block";
+        loadEvents();  // Events laden
+      } else {
+        message.innerText = "Falsches Passwort!";
+        message.style.color = "red";
+      }
+    }
+
+    // Events laden
     function loadEvents() {
       const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
       const eventList = document.getElementById("eventList");
@@ -111,6 +111,7 @@
       });
     }
 
+    // Event hinzufügen
     function addEvent() {
       const title = document.getElementById("eventTitle").value.trim();
       const date = document.getElementById("eventDate").value;
@@ -124,9 +125,10 @@
       const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
       events.push({ title, date, time });
       localStorage.setItem("burgieEvents", JSON.stringify(events));
-      loadEvents(); // Events neu laden
+      loadEvents();  // Events neu laden
     }
 
+    // Event bearbeiten
     function editEvent(index) {
       const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
       const event = events[index];
@@ -139,15 +141,13 @@
       deleteEvent(index);
     }
 
+    // Event löschen
     function deleteEvent(index) {
       const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
       events.splice(index, 1);
       localStorage.setItem("burgieEvents", JSON.stringify(events));
-      loadEvents(); // Events neu laden
+      loadEvents();  // Events neu laden
     }
-
-    // Initiales Laden der Events
-    loadEvents();
   </script>
 </body>
 </html>
