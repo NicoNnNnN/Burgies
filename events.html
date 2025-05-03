@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
-      background-color: #000;
+      background-color: #111;
       color: #fff;
       font-family: sans-serif;
       margin: 0;
@@ -72,6 +72,25 @@
       font-weight: bold;
     }
 
+    /* Events anzeigen */
+    .event {
+      background: #222;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 5px;
+    }
+
+    /* Event bearbeiten und löschen Buttons */
+    .edit-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .edit-buttons button {
+      flex: 1;
+      padding: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -89,26 +108,57 @@
     <h1>Verfügbare Events</h1>
     <p>Wähle ein Event, um deinen Tipp abzugeben:</p>
 
-    <!-- Beispiel für ein Event -->
-    <div>
-      <h3>Event 1: Beispiel Event</h3>
-      <p>Datum: 2025-06-01 – Uhrzeit: 12:00</p>
-      <input type="number" placeholder="Dein Tipp in €">
-      <button>Abgeben</button>
-    </div>
+    <!-- Events werden hier angezeigt -->
+    <div id="eventList"></div>
 
-    <div>
-      <h3>Event 2: Noch ein Event</h3>
-      <p>Datum: 2025-06-02 – Uhrzeit: 15:00</p>
-      <input type="number" placeholder="Dein Tipp in €">
-      <button>Abgeben</button>
-    </div>
-
-    <p id="statusMessage"></p>
+    <button onclick="clearAllEvents()">Alle Events löschen</button>
   </div>
 
   <script>
-    // Weitere Logik für Events und Tipps hinzufügen
+    // Funktion zum Laden der Events
+    function loadEvents() {
+      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
+      const eventList = document.getElementById("eventList");
+      eventList.innerHTML = "";
+      events.forEach((event, index) => {
+        eventList.innerHTML += `
+          <div class="event">
+            <h3>${event.title}</h3>
+            <p>Datum: ${event.date} – Uhrzeit: ${event.time}</p>
+            <div class="edit-buttons">
+              <button onclick="editEvent(${index})">Bearbeiten</button>
+              <button onclick="deleteEvent(${index})">Löschen</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Funktion zum Löschen aller Events
+    function clearAllEvents() {
+      localStorage.removeItem("burgieEvents");
+      loadEvents(); // Nach dem Löschen alle Events neu laden
+    }
+
+    // Event löschen
+    function deleteEvent(index) {
+      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
+      events.splice(index, 1);
+      localStorage.setItem("burgieEvents", JSON.stringify(events));
+      loadEvents(); // Events neu laden
+    }
+
+    // Event bearbeiten
+    function editEvent(index) {
+      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
+      const event = events[index];
+
+      // Beispiel: Event bearbeiten (bietet aber keine Funktionalität zum Bearbeiten an)
+      alert(`Event bearbeiten: ${event.title}`);
+    }
+
+    // Seite initial laden
+    window.onload = loadEvents;
   </script>
 </body>
 </html>
