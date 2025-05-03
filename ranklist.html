@@ -11,10 +11,43 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 2rem;
+    }
+
+    /* Linkes Menü */
+    .sidebar {
+      width: 200px;
+      background-color: #222;
+      padding: 2rem;
+      box-sizing: border-box;
+      height: 100vh;
+      position: fixed;
+    }
+
+    .sidebar h2 {
+      color: red;
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .nav-link {
+      display: block;
+      margin: 1rem 0;
+      color: #ccc;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    .nav-link:hover {
+      color: red;
+    }
+
+    /* Hauptbereich */
+    .main {
+      margin-left: 220px; /* Platz für das Menü */
+      padding: 2rem;
       text-align: center;
     }
 
-    /* Allgemeine Box für Ranglisten */
     .ranking-box {
       display: flex;
       flex-direction: column;
@@ -28,15 +61,16 @@
 
     .ranking-box h2 {
       color: red;
-      font-size: 2rem;
+      font-size: 1.5rem;
       margin-bottom: 1rem;
     }
 
+    /* Rangkarten */
     .rank-card {
       background-color: #333;
-      padding: 20px;
+      padding: 10px;
       margin: 10px;
-      width: 80%;
+      width: 90%;
       border-radius: 10px;
       box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
       display: flex;
@@ -48,91 +82,104 @@
       font-size: 1.2rem;
     }
 
-    .rank-card .rank-number {
+    .rank-number {
       font-size: 2rem;
-      color: gold;
     }
 
-    .rank-card .username {
-      font-size: 1.5rem;
+    .username {
+      font-size: 1.2rem;
       color: #fff;
     }
 
-    .rank-card .points {
+    .points {
       font-size: 1.5rem;
       color: #ff9800;
     }
 
-    /* Differenzierte Farben für Platzierungen */
-    .rank-card:nth-child(1) {
-      background-color: #ffd700; /* Gold */
+    /* Platzierungs-Symbole */
+    .rank-card:nth-child(1) .rank-number {
+      color: gold;
     }
 
-    .rank-card:nth-child(2) {
-      background-color: #c0c0c0; /* Silber */
+    .rank-card:nth-child(2) .rank-number {
+      color: silver;
     }
 
-    .rank-card:nth-child(3) {
-      background-color: #cd7f32; /* Bronze */
+    .rank-card:nth-child(3) .rank-number {
+      color: #cd7f32; /* Bronze */
     }
 
-    /* Allgemeine Buttons */
-    button {
-      padding: 1rem;
-      margin: 1rem;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: none;
-      background-color: red;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
+    /* Responsive Anpassung */
+    @media (max-width: 600px) {
+      .ranking-box {
+        width: 100%;
+        padding: 10px;
+      }
+
+      .rank-card {
+        width: 100%;
+        padding: 8px;
+      }
     }
+
   </style>
 </head>
 <body>
 
-  <div class="ranking-box">
-    <h2>Tägliche Rangliste</h2>
-    <div id="dailyRankings">
-      <!-- Hier werden die täglichen Ranglisten angezeigt -->
-    </div>
-    <button onclick="loadRankings('daily')">Lade Rangliste</button>
+  <!-- Linkes Menü -->
+  <div class="sidebar">
+    <h2>Menü</h2>
+    <a href="home.html" class="nav-link">🏠 Home</a>
+    <a href="events.html" class="nav-link">📅 Events</a>
+    <a href="ranklist.html" class="nav-link">🏆 Rangliste</a>
+    <a href="admin.html" class="nav-link">🔒 Adminbereich</a>
   </div>
 
-  <div class="ranking-box">
-    <h2>Wöchentliche Rangliste</h2>
-    <div id="weeklyRankings">
-      <!-- Hier werden die wöchentlichen Ranglisten angezeigt -->
+  <!-- Hauptbereich -->
+  <div class="main">
+    <!-- Ranglisten Boxen -->
+    <div class="ranking-box">
+      <h2>Tägliche Rangliste</h2>
+      <div id="dailyRankings">
+        <!-- Hier werden die täglichen Ranglisten angezeigt -->
+      </div>
+      <button onclick="loadRankings('daily')">Lade Rangliste</button>
     </div>
-    <button onclick="loadRankings('weekly')">Lade Rangliste</button>
-  </div>
 
-  <div class="ranking-box">
-    <h2>Monatliche Rangliste</h2>
-    <div id="monthlyRankings">
-      <!-- Hier werden die monatlichen Ranglisten angezeigt -->
+    <div class="ranking-box">
+      <h2>Wöchentliche Rangliste</h2>
+      <div id="weeklyRankings">
+        <!-- Hier werden die wöchentlichen Ranglisten angezeigt -->
+      </div>
+      <button onclick="loadRankings('weekly')">Lade Rangliste</button>
     </div>
-    <button onclick="loadRankings('monthly')">Lade Rangliste</button>
+
+    <div class="ranking-box">
+      <h2>Monatliche Rangliste</h2>
+      <div id="monthlyRankings">
+        <!-- Hier werden die monatlichen Ranglisten angezeigt -->
+      </div>
+      <button onclick="loadRankings('monthly')">Lade Rangliste</button>
+    </div>
   </div>
 
   <script>
     // Beispiel-Daten für Ranglisten
     const rankings = {
       daily: [
-        { rank: 1, username: 'Nico', points: 200 },
-        { rank: 2, username: 'Max', points: 180 },
-        { rank: 3, username: 'Lari', points: 160 },
+        { rank: "🥇", username: 'Nico', points: 200 },
+        { rank: "🥈", username: 'Max', points: 180 },
+        { rank: "🥉", username: 'Lari', points: 160 },
       ],
       weekly: [
-        { rank: 1, username: 'Lari', points: 1200 },
-        { rank: 2, username: 'Nico', points: 1100 },
-        { rank: 3, username: 'Max', points: 1050 },
+        { rank: "🥇", username: 'Lari', points: 1200 },
+        { rank: "🥈", username: 'Nico', points: 1100 },
+        { rank: "🥉", username: 'Max', points: 1050 },
       ],
       monthly: [
-        { rank: 1, username: 'Max', points: 5000 },
-        { rank: 2, username: 'Lari', points: 4800 },
-        { rank: 3, username: 'Nico', points: 4500 },
+        { rank: "🥇", username: 'Max', points: 5000 },
+        { rank: "🥈", username: 'Lari', points: 4800 },
+        { rank: "🥉", username: 'Nico', points: 4500 },
       ],
     };
 
@@ -146,7 +193,7 @@
         rankCard.classList.add('rank-card');
 
         rankCard.innerHTML = `
-          <div class="rank-number">${entry.rank}.</div>
+          <div class="rank-number">${entry.rank}</div>
           <div class="username">${entry.username}</div>
           <div class="points">${entry.points} Burgies</div>
         `;
