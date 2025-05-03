@@ -102,7 +102,7 @@
     <h1>Willkommen!</h1>
     <p>Bitte gib deinen Benutzernamen ein:</p>
     <input type="text" id="usernameInput" placeholder="Benutzername">
-    <button onclick="saveUsername()">Speichern</button>
+    <button onclick="saveUsername()">Speichern und fortfahren</button>
 
     <p id="statusMessage"></p>
   </div>
@@ -131,6 +131,11 @@
         localStorage.setItem("username", username);
         document.getElementById("statusMessage").innerText = `Hallo, ${username}!`;
         document.getElementById("usernameInput").style.display = "none"; // Verstecke das Eingabefeld
+
+        // Weiterleitung nach 2 Sekunden, um die Speicherung abzuschließen
+        setTimeout(function() {
+          window.location.href = "events.html"; // Weiterleitung zur Events-Seite oder zu einer anderen Seite
+        }, 2000);
       } else {
         document.getElementById("statusMessage").innerText = "Bitte einen Benutzernamen eingeben.";
       }
