@@ -12,11 +12,43 @@
       margin: 0;
       padding: 0;
       display: flex;
-      justify-content: center;
-      align-items: center;
+      justify-content: flex-start;
+      align-items: flex-start;
       height: 100vh;
-      flex-direction: column;
+    }
+
+    /* Linkes Menü */
+    .sidebar {
+      width: 200px;
+      background-color: #111;
+      padding: 2rem 1rem;
+      box-sizing: border-box;
+      height: 100vh;
+    }
+
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: red;
+    }
+
+    .nav-link {
+      display: block;
+      margin: 1rem 0;
+      color: #ccc;
+      text-decoration: none;
+    }
+
+    .nav-link:hover {
+      color: red;
+    }
+
+    /* Hauptbereich */
+    .main {
+      flex-grow: 1;
+      padding: 2rem;
       text-align: center;
+      width: 100%;
     }
 
     h1 {
@@ -63,41 +95,29 @@
       font-size: 1.1rem;
     }
 
-    /* Rechtes Menü */
-    .menu {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      background-color: #222;
-      padding: 15px;
-      border-radius: 8px;
+    .info-box img {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     }
 
-    .menu a {
-      display: block;
-      color: #ccc;
-      text-decoration: none;
-      margin: 10px 0;
-    }
-
-    .menu a:hover {
-      color: red;
-    }
   </style>
 </head>
 <body>
 
   <!-- Linkes Menü -->
-  <div class="menu">
-    <a href="home.html">🏠 Home</a>
-    <a href="events.html">📅 Events</a>
-    <a href="ranklist.html">🏆 Rangliste</a>
-    <a href="admin.html">🔒 Adminbereich</a>
+  <div class="sidebar">
+    <h2>Menü</h2>
+    <a href="home.html" class="nav-link">🏠 Home</a>
+    <a href="events.html" class="nav-link">📅 Events</a>
+    <a href="ranklist.html" class="nav-link">🏆 Rangliste</a>
+    <a href="admin.html" class="nav-link">🔒 Adminbereich</a>
   </div>
 
   <!-- Willkommenscontainer -->
-  <div class="welcome-container">
+  <div class="main">
     <h1>Herzlich Willkommen!</h1>
     <h2 id="welcomeUser">Benutzername</h2>
 
