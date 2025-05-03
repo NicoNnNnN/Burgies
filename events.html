@@ -147,7 +147,11 @@
           <div class="tipper-list" id="tipperList-${index}">
             <strong>Getippte Personen:</strong>
             <ul id="tipper-${index}">
-              ${event.tippers ? event.tippers.map(tipper => `<li>${tipper}</li>`).join('') : ''}
+              ${event.tippers ? event.tippers.map(tipper => {
+                const username = tipper.username;
+                const userTip = (tipper.username === localStorage.getItem('username')) ? ` - ${tipper.tip} €` : " - Tipp abgegeben";
+                return `<li>${username}${userTip}</li>`;
+              }).join('') : ''}
             </ul>
           </div>
         `;
@@ -177,7 +181,7 @@
       }
 
       // Sicherstellen, dass der Benutzer den Tipp nicht ändert
-      if (event.tippers && event.tippers.includes(username)) {
+      if (event.tippers && event.tippers.some(tipper => tipper.username === username)) {
         alert("Du hast bereits getippt!");
         return;
       }
@@ -187,7 +191,7 @@
         event.tippers = [];
       }
 
-      event.tippers.push(username);
+      event.tippers.push({ username, tip });
       localStorage.setItem("burgieEvents", JSON.stringify(events));
 
       loadEvents(); // Events neu laden, um den aktualisierten Tipp anzuzeigen
