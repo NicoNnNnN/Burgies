@@ -1,12 +1,38 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
   <title>Adminbereich – Burgies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { background: #000; color: #fff; font-family: sans-serif; margin: 0; padding: 2rem; }
-    .container { max-width: 700px; margin: auto; }
+    body { background: #000; color: #fff; font-family: sans-serif; margin: 0; padding: 2rem; display: flex; }
+    /* Linkes Menü */
+    .sidebar {
+      width: 200px;
+      background-color: #111;
+      padding: 2rem 1rem;
+      box-sizing: border-box;
+      height: 100vh;
+    }
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: red;
+    }
+    .nav-link {
+      display: block;
+      margin: 1rem 0;
+      color: #ccc;
+      text-decoration: none;
+    }
+    .nav-link:hover {
+      color: red;
+    }
+    .container {
+      flex-grow: 1;
+      max-width: 700px;
+      margin-left: 220px;
+    }
     h1 { color: red; text-align: center; }
     input, button {
       width: 100%; padding: 1rem; margin: 0.5rem 0;
@@ -14,35 +40,21 @@
     }
     input { background-color: #222; color: #fff; }
     button { background-color: red; color: white; font-weight: bold; cursor: pointer; }
-    .event { background: #111; padding: 1rem; margin: 1rem 0; border-radius: 5px; }
-    .edit-buttons { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
-    .edit-buttons button { flex: 1; padding: 0.5rem; }
-
-    /* Rechtes Menü */
-    .menu {
-      position: fixed;
-      right: 10px;
-      top: 10px;
-      background-color: #111;
-      padding: 10px;
-      border-radius: 8px;
-    }
-
-    .menu a {
-      display: block;
-      color: white;
-      text-decoration: none;
-      padding: 8px;
-    }
-
-    .menu a:hover {
-      background-color: red;
-    }
   </style>
 </head>
 <body>
+  <!-- Linkes Menü -->
+  <div class="sidebar">
+    <h2>Menü</h2>
+    <a href="home.html" class="nav-link">🏠 Home</a>
+    <a href="events.html" class="nav-link">📅 Events</a>
+    <a href="ranklist.html" class="nav-link">🏆 Rangliste</a>
+    <a href="admin.html" class="nav-link">🔒 Adminbereich</a>
+  </div>
+
+  <!-- Adminbereich -->
   <div class="container">
-    <div id="login">
-      <h1>Admin Login</h1>
-      <input type="password" id="adminPw" placeholder="Admin-Passwort">
-      <button onclick="checkLogin()">Ein
+    <h1>Burgie Adminbereich</h1>
+    <!-- Dein Adminbereich-Inhalt hier -->
+  </div>
+</body>
