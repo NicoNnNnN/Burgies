@@ -2,57 +2,26 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>Adminbereich – Burgies</title>
+  <title>Admin Bereich – Burgies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { background: #000; color: #fff; font-family: sans-serif; margin: 0; padding: 2rem; display: flex; }
-    /* Linkes Menü */
-    .sidebar {
-      width: 200px;
+    body {
       background-color: #111;
-      padding: 2rem 1rem;
-      box-sizing: border-box;
-      height: 100vh;
-    }
-    .sidebar h2 {
-      font-size: 1.2rem;
-      margin-bottom: 1.5rem;
-      color: red;
-    }
-    .nav-link {
-      display: block;
-      margin: 1rem 0;
-      color: #ccc;
-      text-decoration: none;
-    }
-    .nav-link:hover {
-      color: red;
-    }
-
-    /* Admin Login Bereich */
-    .login-container {
-      flex-grow: 1;
+      color: #fff;
+      font-family: sans-serif;
+      margin: 0;
       padding: 2rem;
-      width: 100%;
       text-align: center;
     }
 
-    .login-container h1 {
-      color: red;
-    }
-
+    /* Eingabefelder und Buttons */
     input, button {
       padding: 1rem;
-      margin: 0.5rem 0;
+      margin: 1rem;
       font-size: 1rem;
       border-radius: 5px;
       border: none;
       box-sizing: border-box;
-    }
-
-    input {
-      background-color: #222;
-      color: #fff;
     }
 
     button {
@@ -62,83 +31,21 @@
       cursor: pointer;
     }
 
-    #loginMessage {
-      color: red;
+    .event-box {
+      background-color: #222;
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 5px;
     }
-
-    /* Adminbereich */
-    .admin-container {
-      flex-grow: 1;
-      max-width: 700px;
-      margin-left: 220px;
-      display: none;
-    }
-
-    .admin-container h1 {
-      color: red;
-      text-align: center;
-    }
-
-    /* Event und Liste */
-    .event { background: #111; padding: 1rem; margin: 1rem 0; border-radius: 5px; }
-    .edit-buttons { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
-    .edit-buttons button { flex: 1; padding: 0.5rem; }
   </style>
 </head>
 <body>
+  <h1>Admin Bereich</h1>
 
-  <!-- Linkes Menü -->
-  <div class="sidebar">
-    <h2>Menü</h2>
-    <a href="home.html" class="nav-link">🏠 Home</a>
-    <a href="events.html" class="nav-link">📅 Events</a>
-    <a href="ranklist.html" class="nav-link">🏆 Rangliste</a>
-    <a href="admin.html" class="nav-link">🔒 Adminbereich</a>
-  </div>
-
-  <!-- Admin Login -->
-  <div class="login-container" id="login-container">
-    <h1>Admin Login</h1>
-    <input type="password" id="adminPw" placeholder="Admin-Passwort">
-    <button onclick="checkPassword()">Login</button>
-    <p id="loginMessage"></p>
-  </div>
-
-  <!-- Adminbereich (wird nur angezeigt, wenn das Passwort korrekt ist) -->
-  <div class="admin-container" id="adminContainer">
-    <h1>Burgie Adminbereich</h1>
-    <h2>Neues Event hinzufügen</h2>
-    <input type="text" id="eventTitle" placeholder="Titel des Events">
-    <input type="date" id="eventDate">
-    <input type="time" id="eventTime">
-    <button onclick="addEvent()">Event speichern</button>
-
-    <h2>Verfügbare Events</h2>
-    <div id="eventList"></div>
-  </div>
+  <div id="eventList"></div>
 
   <script>
-    // Passwort für den Adminbereich
-    const adminPassword = "admin2025";  // Admin-Passwort hier festgelegt
-
-    // Funktion zur Passwortüberprüfung und Zugang gewähren
-    function checkPassword() {
-      const enteredPassword = document.getElementById("adminPw").value;
-      const message = document.getElementById("loginMessage");
-
-      if (enteredPassword === adminPassword) {
-        // Wenn das Passwort korrekt ist, den Adminbereich anzeigen
-        document.getElementById("login-container").style.display = "none";
-        document.getElementById("adminContainer").style.display = "block";
-        loadEvents();  // Events laden
-      } else {
-        // Falsches Passwort
-        message.innerText = "Falsches Passwort!";
-        message.style.color = "red";
-      }
-    }
-
-    // Funktion zum Laden der Events
+    // Event-Daten aus localStorage laden
     function loadEvents() {
       const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
       const eventList = document.getElementById("eventList");
@@ -147,69 +54,45 @@
       // Alle Events anzeigen
       events.forEach((event, index) => {
         const eventDiv = document.createElement('div');
-        eventDiv.classList.add('event');
+        eventDiv.classList.add('event-box');
 
         eventDiv.innerHTML = `
           <h3>${event.title}</h3>
           <p>Datum: ${event.date} – Uhrzeit: ${event.time}</p>
-          <p><strong>Tatsächlicher Gewinn: </strong>${event.actualWin ? event.actualWin + ' €' : 'Noch nicht eingetragen'}</p>
+          <p>Geschätzter Gewinn: ${event.estimatedWin} €</p>
 
-          <div class="edit-buttons">
-            <button onclick="editEvent(${index})">Bearbeiten</button>
-            <button onclick="deleteEvent(${index})">Löschen</button>
-          </div>
+          <label for="actualWin-${index}">Tatsächlicher Gewinn: </label>
+          <input type="number" id="actualWin-${index}" value="${event.actualWin || ''}" placeholder="Geben Sie den tatsächlichen Gewinn ein" />
+          <button onclick="updateActualWin(${index})">Gewinn aktualisieren</button>
         `;
 
         eventList.appendChild(eventDiv);
       });
     }
 
-    // Event hinzufügen
-    function addEvent() {
-      const title = document.getElementById("eventTitle").value.trim();
-      const date = document.getElementById("eventDate").value;
-      const time = document.getElementById("eventTime").value;
+    // Tatsächlichen Gewinn aktualisieren
+    function updateActualWin(eventIndex) {
+      const actualWinInput = document.getElementById(`actualWin-${eventIndex}`);
+      const actualWin = actualWinInput.value.trim();
 
-      if (!title || !date || !time) {
-        alert("Bitte alle Felder ausfüllen!");
+      if (actualWin === "") {
+        alert("Bitte geben Sie den tatsächlichen Gewinn ein.");
         return;
       }
 
       const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
-      events.push({ title, date, time });
-      localStorage.setItem("burgieEvents", JSON.stringify(events));
-      loadEvents();  // Events neu laden
+      const event = events[eventIndex];
+
+      event.actualWin = actualWin; // Tatsächlichen Gewinn im Event-Objekt speichern
+
+      localStorage.setItem("burgieEvents", JSON.stringify(events)); // Events im localStorage aktualisieren
+
+      loadEvents(); // Events neu laden, um den aktualisierten Gewinn zu zeigen
+      alert("Der tatsächliche Gewinn wurde erfolgreich aktualisiert!");
     }
 
-    // Event löschen
-    function deleteEvent(index) {
-      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
-      events.splice(index, 1);
-      localStorage.setItem("burgieEvents", JSON.stringify(events));
-      loadEvents();  // Events neu laden
-    }
-
-    // Event bearbeiten (Bearbeitung und tatsächlicher Gewinn)
-    function editEvent(index) {
-      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
-      const event = events[index];
-
-      // Die Eingabefelder für die Bearbeitung der Events befüllen
-      document.getElementById("eventTitle").value = event.title;
-      document.getElementById("eventDate").value = event.date;
-      document.getElementById("eventTime").value = event.time;
-
-      // Tatsächlicher Gewinn
-      const actualWin = prompt("Geben Sie den tatsächlichen Gewinn für das Event ein:", event.actualWin || "");
-      if (actualWin !== null) {
-        event.actualWin = actualWin;  // Tatsächlichen Gewinn setzen
-      }
-
-      // Event aktualisieren und neu speichern
-      events[index] = event;
-      localStorage.setItem("burgieEvents", JSON.stringify(events));
-      loadEvents();  // Events neu laden
-    }
+    // Seite initial laden
+    window.onload = loadEvents;
   </script>
 
 </body>
