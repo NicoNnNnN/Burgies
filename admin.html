@@ -111,6 +111,7 @@
     <input type="text" id="eventTitle" placeholder="Titel des Events">
     <input type="date" id="eventDate">
     <input type="time" id="eventTime">
+    <input type="number" id="estimatedWin" placeholder="Geschätzter Gewinn (€)">
     <button onclick="addEvent()">Event speichern</button>
 
     <h2>Verfügbare Events</h2>
@@ -143,17 +144,25 @@
       const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
       const eventList = document.getElementById("eventList");
       eventList.innerHTML = "";
+
+      // Alle Events anzeigen
       events.forEach((event, index) => {
-        eventList.innerHTML += `
-          <div class="event">
-            <h3>${event.title}</h3>
-            <p>Datum: ${event.date} – Uhrzeit: ${event.time}</p>
-            <div class="edit-buttons">
-              <button onclick="editEvent(${index})">Bearbeiten</button>
-              <button onclick="deleteEvent(${index})">Löschen</button>
-            </div>
+        const eventDiv = document.createElement('div');
+        eventDiv.classList.add('event');
+
+        eventDiv.innerHTML = `
+          <h3>${event.title}</h3>
+          <p>Datum: ${event.date} – Uhrzeit: ${event.time}</p>
+          <p><strong>Geschätzter Gewinn: </strong>${event.estimatedWin} €</p>
+          <p><strong>Tatsächlicher Gewinn: </strong>${event.actualWin ? event.actualWin + ' €' : 'Noch nicht eingetragen'}</p>
+
+          <div class="edit-buttons">
+            <button onclick="editEvent(${index})">Bearbeiten</button>
+            <button onclick="deleteEvent(${index})">Löschen</button>
           </div>
         `;
+
+        eventList.appendChild(eventDiv);
       });
     }
 
@@ -162,14 +171,23 @@
       const title = document.getElementById("eventTitle").value.trim();
       const date = document.getElementById("eventDate").value;
       const time = document.getElementById("eventTime").value;
+      const estimatedWin = document.getElementById("estimatedWin").value.trim();
 
-      if (!title || !date || !time) {
+      if (!title || !date || !time || !estimatedWin) {
         alert("Bitte alle Felder ausfüllen!");
         return;
       }
 
       const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
-      events.push({ title, date, time });
+      events.push({ title, date, time, estimatedWin });
+      localStorage.setItem("burgieEvents", JSON.stringify(events));
+      loadEvents();  // Events neu laden
+    }
+
+    // Event löschen
+    function deleteEvent(index) {
+      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
+      events.splice(index, 1);
       localStorage.setItem("burgieEvents", JSON.stringify(events));
       loadEvents();  // Events neu laden
     }
@@ -179,18 +197,20 @@
       const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
       const event = events[index];
 
+      // Die Eingabefelder für die Bearbeitung der Events befüllen
       document.getElementById("eventTitle").value = event.title;
       document.getElementById("eventDate").value = event.date;
       document.getElementById("eventTime").value = event.time;
+      document.getElementById("estimatedWin").value = event.estimatedWin;
 
-      // Event löschen und neu anlegen
-      deleteEvent(index);
-    }
+      // Der Admin kann den tatsächlichen Gewinn auch hier eingeben
+      const actualWin = prompt("Geben Sie den tatsächlichen Gewinn für das Event ein:", event.actualWin || "");
+      if (actualWin !== null) {
+        event.actualWin = actualWin;  // Tatsächlichen Gewinn setzen
+      }
 
-    // Event löschen
-    function deleteEvent(index) {
-      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
-      events.splice(index, 1);
+      // Event aktualisieren und neu speichern
+      events[index] = event;
       localStorage.setItem("burgieEvents", JSON.stringify(events));
       loadEvents();  // Events neu laden
     }
