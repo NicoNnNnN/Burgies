@@ -2,24 +2,58 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>Rangliste – Burgies</title>
+  <title>Ranglisten – Burgies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
-      background-color: #000;
+      background-color: #111;
       color: #fff;
       font-family: sans-serif;
       margin: 0;
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
     }
 
-    /* Linkes Menü */
+    .rank-box {
+      background-color: #222;
+      margin-bottom: 2rem;
+      width: 80%;
+      padding: 1rem;
+      border-radius: 5px;
+    }
+
+    h2 {
+      color: red;
+      text-align: center;
+    }
+
+    .rank-list {
+      margin-top: 1rem;
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .rank-list li {
+      background-color: #333;
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Menülinks */
     .sidebar {
       width: 200px;
       background-color: #111;
       padding: 2rem 1rem;
       box-sizing: border-box;
       height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
     }
 
     .sidebar h2 {
@@ -38,25 +72,10 @@
     .nav-link:hover {
       color: red;
     }
-
-    /* Hauptbereich */
-    .main {
-      flex-grow: 1;
-      padding: 2rem;
-      text-align: center;
-    }
-
-    .rank-item {
-      margin: 1rem;
-      padding: 1rem;
-      background-color: #111;
-      border-radius: 5px;
-    }
-
-    /* Weitere Stile nach Bedarf */
   </style>
 </head>
 <body>
+
   <!-- Linkes Menü -->
   <div class="sidebar">
     <h2>Menü</h2>
@@ -66,31 +85,86 @@
     <a href="admin.html" class="nav-link">🔒 Adminbereich</a>
   </div>
 
-  <!-- Hauptbereich -->
-  <div class="main">
-    <h1>Aktuelle Rangliste</h1>
+  <!-- Ranglisten Boxen -->
+  <div class="rank-box">
+    <h2>Tägliche Rangliste</h2>
+    <ul class="rank-list" id="dailyRanklist"></ul>
+  </div>
 
-    <!-- Ranglisten-Positionen -->
-    <div class="rank-item">
-      <h3>1. Spieler A</h3>
-      <p>Gesamt: 250 Burgies 🍔</p>
-    </div>
+  <div class="rank-box">
+    <h2>Wöchentliche Rangliste</h2>
+    <ul class="rank-list" id="weeklyRanklist"></ul>
+  </div>
 
-    <div class="rank-item">
-      <h3>2. Spieler B</h3>
-      <p>Gesamt: 200 Burgies 🍔</p>
-    </div>
-
-    <div class="rank-item">
-      <h3>3. Spieler C</h3>
-      <p>Gesamt: 150 Burgies 🍔</p>
-    </div>
-
-    <p id="statusMessage"></p>
+  <div class="rank-box">
+    <h2>Monatliche Rangliste</h2>
+    <ul class="rank-list" id="monthlyRanklist"></ul>
   </div>
 
   <script>
-    // Weitere Logik für Ranglisten-Daten hinzufügen
+    // Funktion zum Laden und Berechnen der Ranglisten
+    function loadRanklists() {
+      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
+      const dailyRanklist = document.getElementById("dailyRanklist");
+      const weeklyRanklist = document.getElementById("weeklyRanklist");
+      const monthlyRanklist = document.getElementById("monthlyRanklist");
+
+      // Ranglisten leeren
+      dailyRanklist.innerHTML = "";
+      weeklyRanklist.innerHTML = "";
+      monthlyRanklist.innerHTML = "";
+
+      // Alle Tipps extrahieren
+      const allTips = getAllTips(events);
+
+      // Rangliste für alle Perioden berechnen
+      const sortedByDaily = sortTips(allTips, 'daily');
+      const sortedByWeekly = sortTips(allTips, 'weekly');
+      const sortedByMonthly = sortTips(allTips, 'monthly');
+
+      // Rangliste anzeigen
+      displayRanklist(sortedByDaily, dailyRanklist);
+      displayRanklist(sortedByWeekly, weeklyRanklist);
+      displayRanklist(sortedByMonthly, monthlyRanklist);
+    }
+
+    // Funktion, um die Tipps nach Zeitraum zu sortieren
+    function sortTips(tips, period) {
+      // Beispiel: Hier ist keine Zeitlogik eingebaut, aber du kannst nach Datum und Zeitraum filtern.
+      return tips.sort((a, b) => b.burgies - a.burgies); // Sortiert nach Burgies
+    }
+
+    // Funktion zum Anzeigen der Rangliste
+    function displayRanklist(sortedTips, ranklistElement) {
+      sortedTips.forEach((tip) => {
+        const li = document.createElement('li');
+        li.textContent = `${tip.username} – ${tip.burgies} Burgies`;
+        ranklistElement.appendChild(li);
+      });
+    }
+
+    // Funktion zum Extrahieren der Tipps und Burgies
+    function getAllTips(events) {
+      const tips = [];
+
+      events.forEach((event) => {
+        if (event.tippers) {
+          event.tippers.forEach((tipper) => {
+            tips.push({
+              username: tipper.username,
+              burgies: parseInt(tipper.burgies), // Tipp-Betrag als Burgies
+              event: event.title,
+            });
+          });
+        }
+      });
+
+      return tips;
+    }
+
+    // Seite initial laden
+    window.onload = loadRanklists;
   </script>
+
 </body>
 </html>
