@@ -10,10 +10,10 @@
       color: #fff;
       font-family: sans-serif;
       margin: 0;
-      padding: 0;
       display: flex;
     }
 
+    /* Linkes Menü */
     .sidebar {
       width: 200px;
       background-color: #111;
@@ -39,6 +39,7 @@
       color: red;
     }
 
+    /* Hauptbereich */
     .main {
       flex-grow: 1;
       padding: 2rem;
@@ -75,29 +76,19 @@
       font-weight: bold;
     }
 
-    /* Rechtes Menü */
-    .menu {
-      position: fixed;
-      right: 10px;
-      top: 10px;
-      background-color: #111;
-      padding: 10px;
-      border-radius: 8px;
-    }
-
-    .menu a {
-      display: block;
-      color: white;
-      text-decoration: none;
-      padding: 8px;
-    }
-
-    .menu a:hover {
-      background-color: red;
-    }
   </style>
 </head>
 <body>
+  <!-- Linkes Menü -->
+  <div class="sidebar">
+    <h2>Menü</h2>
+    <a href="home.html" class="nav-link">🏠 Home</a>
+    <a href="events.html" class="nav-link">📅 Events</a>
+    <a href="ranklist.html" class="nav-link">🏆 Rangliste</a>
+    <a href="admin.html" class="nav-link">🔒 Adminbereich</a>
+  </div>
+
+  <!-- Hauptbereich -->
   <div class="main">
     <h1 id="welcomeMessage">Willkommen!</h1>
     
@@ -109,14 +100,6 @@
     </div>
 
     <p id="statusMessage"></p>
-  </div>
-
-  <!-- Rechtes Menü -->
-  <div class="menu">
-    <a href="home.html">Home</a>
-    <a href="events.html">Events</a>
-    <a href="ranklist.html">Rangliste</a>
-    <a href="admin.html">Adminbereich</a>
   </div>
 
   <script>
