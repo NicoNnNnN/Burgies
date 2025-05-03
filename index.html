@@ -1,11 +1,70 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>HellFire Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* Dein CSS für das Login */
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 4rem 1rem;
+      text-align: center;
+    }
+
+    h1 {
+      color: red;
+      margin-bottom: 2rem;
+    }
+
+    input, button {
+      padding: 1rem;
+      margin: 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+      box-sizing: border-box;
+    }
+
+    input {
+      background-color: #333;
+      color: #fff;
+    }
+
+    button {
+      background-color: red;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #statusMessage {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    /* Rechtes Menü */
+    .menu {
+      position: fixed;
+      right: 10px;
+      top: 10px;
+      background-color: #111;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .menu a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 8px;
+    }
+
+    .menu a:hover {
+      background-color: red;
+    }
   </style>
 </head>
 <body>
@@ -14,6 +73,14 @@
   <input type="password" id="passwordInput" placeholder="Passwort">
   <button onclick="checkPassword()">Weiter</button>
   <p id="statusMessage"></p>
+
+  <!-- Rechtes Menü -->
+  <div class="menu">
+    <a href="home.html">Home</a>
+    <a href="events.html">Events</a>
+    <a href="ranklist.html">Rangliste</a>
+    <a href="admin.html">Adminbereich</a>
+  </div>
 
   <script>
     function checkPassword() {
