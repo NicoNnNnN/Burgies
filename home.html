@@ -99,10 +99,14 @@
 </head>
 <body>
   <div class="main">
-    <h1>Willkommen!</h1>
-    <p>Bitte gib deinen Benutzernamen ein:</p>
-    <input type="text" id="usernameInput" placeholder="Benutzername">
-    <button onclick="saveUsername()">Speichern und fortfahren</button>
+    <h1 id="welcomeMessage">Willkommen!</h1>
+    
+    <!-- Benutzernamen Eingabefeld, nur sichtbar, wenn noch kein Benutzername gespeichert ist -->
+    <div id="usernameInputContainer">
+      <p>Bitte gib deinen Benutzernamen ein:</p>
+      <input type="text" id="usernameInput" placeholder="Benutzername">
+      <button onclick="saveUsername()">Speichern und fortfahren</button>
+    </div>
 
     <p id="statusMessage"></p>
   </div>
@@ -120,8 +124,8 @@
     window.onload = function () {
       const storedUsername = localStorage.getItem("username");
       if (storedUsername) {
-        document.getElementById("statusMessage").innerText = `Hallo, ${storedUsername}!`;
-        document.getElementById("usernameInput").style.display = "none"; // Verstecke das Eingabefeld
+        document.getElementById("welcomeMessage").innerText = `Willkommen, ${storedUsername}!`;
+        document.getElementById("usernameInputContainer").style.display = "none"; // Verstecke das Eingabefeld
       }
     };
 
@@ -129,8 +133,8 @@
       const username = document.getElementById("usernameInput").value.trim();
       if (username) {
         localStorage.setItem("username", username);
-        document.getElementById("statusMessage").innerText = `Hallo, ${username}!`;
-        document.getElementById("usernameInput").style.display = "none"; // Verstecke das Eingabefeld
+        document.getElementById("welcomeMessage").innerText = `Willkommen, ${username}!`;
+        document.getElementById("usernameInputContainer").style.display = "none"; // Verstecke das Eingabefeld
 
         // Weiterleitung nach 2 Sekunden, um die Speicherung abzuschließen
         setTimeout(function() {
