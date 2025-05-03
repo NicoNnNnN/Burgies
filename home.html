@@ -2,131 +2,144 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>HellFire Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Willkommen – Burgies WebApp</title>
   <style>
     body {
-      background-color: #000;
-      color: #fff;
-      font-family: sans-serif;
-      margin: 0;
-      display: flex;
-    }
-
-    /* Linkes Menü */
-    .sidebar {
-      width: 200px;
       background-color: #111;
-      padding: 2rem 1rem;
-      box-sizing: border-box;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       height: 100vh;
-    }
-
-    .sidebar h2 {
-      font-size: 1.2rem;
-      margin-bottom: 1.5rem;
-      color: red;
-    }
-
-    .nav-link {
-      display: block;
-      margin: 1rem 0;
-      color: #ccc;
-      text-decoration: none;
-    }
-
-    .nav-link:hover {
-      color: red;
-    }
-
-    /* Hauptbereich */
-    .main {
-      flex-grow: 1;
-      padding: 2rem;
+      flex-direction: column;
       text-align: center;
     }
 
-    input, button {
-      padding: 1rem;
-      margin: 0.5rem;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: none;
-      box-sizing: border-box;
+    h1 {
+      color: red;
+      margin-top: 20px;
     }
 
-    input {
-      background-color: #333;
-      color: #fff;
+    .welcome-container {
+      max-width: 800px;
+      width: 90%;
+      margin: 20px 0;
     }
 
-    button {
-      background-color: red;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
+    .welcome-container h2 {
+      font-size: 2rem;
+      margin: 10px 0;
     }
 
-    #adminPasswordForm {
-      margin-top: 2rem;
+    .info-box {
+      background-color: #222;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     }
 
-    #statusMessage {
-      margin-top: 1rem;
-      font-weight: bold;
+    .info-box h3 {
+      color: red;
+      margin-bottom: 10px;
     }
 
+    .info-box p {
+      font-size: 1.1rem;
+      color: #ddd;
+    }
+
+    .info-box ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .info-box ul li {
+      margin: 8px 0;
+      font-size: 1.1rem;
+    }
+
+    .info-box img {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .menu {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background-color: #222;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .menu a {
+      display: block;
+      color: #ccc;
+      text-decoration: none;
+      margin: 10px 0;
+    }
+
+    .menu a:hover {
+      color: red;
+    }
   </style>
 </head>
 <body>
+
   <!-- Linkes Menü -->
-  <div class="sidebar">
-    <h2>Menü</h2>
-    <a href="home.html" class="nav-link">🏠 Home</a>
-    <a href="events.html" class="nav-link">📅 Events</a>
-    <a href="ranklist.html" class="nav-link">🏆 Rangliste</a>
-    <a href="admin.html" class="nav-link">🔒 Adminbereich</a>
+  <div class="menu">
+    <a href="home.html">🏠 Home</a>
+    <a href="events.html">📅 Events</a>
+    <a href="ranklist.html">🏆 Rangliste</a>
+    <a href="admin.html">🔒 Adminbereich</a>
   </div>
 
-  <!-- Hauptbereich -->
-  <div class="main">
-    <h1 id="welcomeMessage">Willkommen!</h1>
-    
-    <!-- Benutzernamen Eingabefeld, nur sichtbar, wenn noch kein Benutzername gespeichert ist -->
-    <div id="usernameInputContainer">
-      <p>Bitte gib deinen Benutzernamen ein:</p>
-      <input type="text" id="usernameInput" placeholder="Benutzername">
-      <button onclick="saveUsername()">Speichern und fortfahren</button>
-    </div>
+  <!-- Willkommenscontainer -->
+  <div class="welcome-container">
+    <h1>Herzlich Willkommen!</h1>
+    <h2 id="welcomeUser">Benutzername</h2>
 
-    <p id="statusMessage"></p>
+    <div class="info-box">
+      <h3>Wie man Burgies sammelt:</h3>
+      <p>Die Burgies werden durch das Tippen auf verschiedene Events und durch den Gewinn von Schätzungen gesammelt.</p>
+      <ul>
+        <li>1. Tipp abgeben bei einem Event</li>
+        <li>2. Wenn du richtig tippst, bekommst du Burgies 🍔</li>
+        <li>3. Je näher du am tatsächlichen Ergebnis bist, desto mehr Burgies bekommst du!</li>
+      </ul>
+
+      <img src="https://via.placeholder.com/400x300?text=Beispiel+Bild+Burgies" alt="Burgies sammeln">
+
+      <h3>Wie man Tipps abgibt:</h3>
+      <p>Um einen Tipp abzugeben, wähle ein Event aus und gib deinen Tipp ab, wie viel du erwartest. Du kannst deinen Tipp bis zu 48 Stunden vor dem Event ändern.</p>
+      <ul>
+        <li>1. Klicke auf das Event deiner Wahl</li>
+        <li>2. Gebe deinen Tipp ab (z. B. wie viel Umsatz ein Event machen wird)</li>
+        <li>3. Warte auf das tatsächliche Ergebnis!</li>
+      </ul>
+
+      <img src="https://via.placeholder.com/400x300?text=Beispiel+Bild+Tippabgabe" alt="Tipp abgeben">
+    </div>
   </div>
 
   <script>
-    // Prüfen, ob ein Benutzername bereits gespeichert wurde
-    window.onload = function () {
-      const storedUsername = localStorage.getItem("username");
-      if (storedUsername) {
-        document.getElementById("welcomeMessage").innerText = `Willkommen, ${storedUsername}!`;
-        document.getElementById("usernameInputContainer").style.display = "none"; // Verstecke das Eingabefeld
-      }
-    };
-
-    function saveUsername() {
-      const username = document.getElementById("usernameInput").value.trim();
+    // Willkommensnachricht dynamisch mit Benutzernamen anzeigen
+    window.onload = function() {
+      const username = localStorage.getItem("username");
       if (username) {
-        localStorage.setItem("username", username);
-        document.getElementById("welcomeMessage").innerText = `Willkommen, ${username}!`;
-        document.getElementById("usernameInputContainer").style.display = "none"; // Verstecke das Eingabefeld
-
-        // Weiterleitung nach 2 Sekunden, um die Speicherung abzuschließen
-        setTimeout(function() {
-          window.location.href = "events.html"; // Weiterleitung zur Events-Seite oder zu einer anderen Seite
-        }, 2000);
-      } else {
-        document.getElementById("statusMessage").innerText = "Bitte einen Benutzernamen eingeben.";
+        document.getElementById("welcomeUser").innerText = `Willkommen, ${username}!`;
       }
     }
   </script>
+
 </body>
 </html>
