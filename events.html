@@ -80,20 +80,30 @@
       border-radius: 5px;
     }
 
-    /* Event bearbeiten und löschen Buttons */
-    .edit-buttons {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
+    /* Tippabgabe */
+    .tip-box {
+      margin-top: 1rem;
     }
 
-    .edit-buttons button {
-      flex: 1;
-      padding: 0.5rem;
+    .tip-box input {
+      width: 80%;
     }
+
+    .tip-box button {
+      width: 20%;
+    }
+
+    /* Wer hat getippt */
+    .tipper-list {
+      margin-top: 10px;
+      font-size: 1rem;
+      color: #ddd;
+    }
+
   </style>
 </head>
 <body>
+
   <!-- Linkes Menü -->
   <div class="sidebar">
     <h2>Menü</h2>
@@ -110,51 +120,77 @@
 
     <!-- Events werden hier angezeigt -->
     <div id="eventList"></div>
-
-    <button onclick="clearAllEvents()">Alle Events löschen</button>
   </div>
 
   <script>
-    // Funktion zum Laden der Events
+    // Funktion zum Laden der Events aus dem localStorage
     function loadEvents() {
       const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
       const eventList = document.getElementById("eventList");
       eventList.innerHTML = "";
+
+      // Alle Events anzeigen
       events.forEach((event, index) => {
-        eventList.innerHTML += `
-          <div class="event">
-            <h3>${event.title}</h3>
-            <p>Datum: ${event.date} – Uhrzeit: ${event.time}</p>
-            <div class="edit-buttons">
-              <button onclick="editEvent(${index})">Bearbeiten</button>
-              <button onclick="deleteEvent(${index})">Löschen</button>
-            </div>
+        const eventDiv = document.createElement('div');
+        eventDiv.classList.add('event');
+
+        eventDiv.innerHTML = `
+          <h3>${event.title}</h3>
+          <p>Datum: ${event.date} – Uhrzeit: ${event.time}</p>
+          <p><strong>Geschätzter Gewinn: </strong>${event.estimatedWin} €</p>
+
+          <div class="tip-box">
+            <input type="number" id="tip-${index}" placeholder="Dein Tipp in €" />
+            <button onclick="submitTip(${index})">Tipp abgeben</button>
+          </div>
+
+          <div class="tipper-list" id="tipperList-${index}">
+            <strong>Getippte Personen:</strong>
+            <ul id="tipper-${index}">
+              ${event.tippers ? event.tippers.map(tipper => `<li>${tipper}</li>`).join('') : ''}
+            </ul>
           </div>
         `;
+
+        eventList.appendChild(eventDiv);
       });
     }
 
-    // Funktion zum Löschen aller Events
-    function clearAllEvents() {
-      localStorage.removeItem("burgieEvents");
-      loadEvents(); // Nach dem Löschen alle Events neu laden
-    }
+    // Tipp abgeben
+    function submitTip(eventIndex) {
+      const tipInput = document.getElementById(`tip-${eventIndex}`);
+      const tip = tipInput.value.trim();
 
-    // Event löschen
-    function deleteEvent(index) {
+      if (tip === "") {
+        alert("Bitte gib einen Tipp ab.");
+        return;
+      }
+
       const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
-      events.splice(index, 1);
+      const event = events[eventIndex];
+
+      // Tipp nur abgeben, wenn der Benutzer noch nicht getippt hat
+      const username = localStorage.getItem("username");
+      if (!username) {
+        alert("Bitte gib deinen Benutzernamen ein!");
+        return;
+      }
+
+      // Sicherstellen, dass der Benutzer den Tipp nicht ändert
+      if (event.tippers && event.tippers.includes(username)) {
+        alert("Du hast bereits getippt!");
+        return;
+      }
+
+      // Tipp und Benutzer hinzufügen
+      if (!event.tippers) {
+        event.tippers = [];
+      }
+
+      event.tippers.push(username);
       localStorage.setItem("burgieEvents", JSON.stringify(events));
-      loadEvents(); // Events neu laden
-    }
 
-    // Event bearbeiten
-    function editEvent(index) {
-      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
-      const event = events[index];
-
-      // Beispiel: Event bearbeiten (bietet aber keine Funktionalität zum Bearbeiten an)
-      alert(`Event bearbeiten: ${event.title}`);
+      loadEvents(); // Events neu laden, um den aktualisierten Tipp anzuzeigen
     }
 
     // Seite initial laden
