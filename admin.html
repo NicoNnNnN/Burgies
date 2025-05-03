@@ -111,7 +111,6 @@
     <input type="text" id="eventTitle" placeholder="Titel des Events">
     <input type="date" id="eventDate">
     <input type="time" id="eventTime">
-    <input type="number" id="estimatedWin" placeholder="Geschätzter Gewinn (€)">
     <button onclick="addEvent()">Event speichern</button>
 
     <h2>Verfügbare Events</h2>
@@ -153,7 +152,6 @@
         eventDiv.innerHTML = `
           <h3>${event.title}</h3>
           <p>Datum: ${event.date} – Uhrzeit: ${event.time}</p>
-          <p><strong>Geschätzter Gewinn: </strong>${event.estimatedWin} €</p>
           <p><strong>Tatsächlicher Gewinn: </strong>${event.actualWin ? event.actualWin + ' €' : 'Noch nicht eingetragen'}</p>
 
           <div class="edit-buttons">
@@ -171,15 +169,14 @@
       const title = document.getElementById("eventTitle").value.trim();
       const date = document.getElementById("eventDate").value;
       const time = document.getElementById("eventTime").value;
-      const estimatedWin = document.getElementById("estimatedWin").value.trim();
 
-      if (!title || !date || !time || !estimatedWin) {
+      if (!title || !date || !time) {
         alert("Bitte alle Felder ausfüllen!");
         return;
       }
 
       const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
-      events.push({ title, date, time, estimatedWin });
+      events.push({ title, date, time });
       localStorage.setItem("burgieEvents", JSON.stringify(events));
       loadEvents();  // Events neu laden
     }
@@ -201,7 +198,6 @@
       document.getElementById("eventTitle").value = event.title;
       document.getElementById("eventDate").value = event.date;
       document.getElementById("eventTime").value = event.time;
-      document.getElementById("estimatedWin").value = event.estimatedWin;
 
       // Tatsächlicher Gewinn
       const actualWin = prompt("Geben Sie den tatsächlichen Gewinn für das Event ein:", event.actualWin || "");
