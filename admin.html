@@ -192,7 +192,7 @@
       loadEvents();  // Events neu laden
     }
 
-    // Event bearbeiten
+    // Event bearbeiten (Bearbeitung und tatsächlicher Gewinn)
     function editEvent(index) {
       const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
       const event = events[index];
@@ -203,7 +203,7 @@
       document.getElementById("eventTime").value = event.time;
       document.getElementById("estimatedWin").value = event.estimatedWin;
 
-      // Der Admin kann den tatsächlichen Gewinn auch hier eingeben
+      // Tatsächlicher Gewinn
       const actualWin = prompt("Geben Sie den tatsächlichen Gewinn für das Event ein:", event.actualWin || "");
       if (actualWin !== null) {
         event.actualWin = actualWin;  // Tatsächlichen Gewinn setzen
