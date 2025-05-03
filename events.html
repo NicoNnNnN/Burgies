@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Events – Burgies</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 4rem 1rem;
+      text-align: center;
+    }
+
+    h1 {
+      color: red;
+      margin-bottom: 2rem;
+    }
+
+    input, button {
+      padding: 1rem;
+      margin: 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+      box-sizing: border-box;
+    }
+
+    input {
+      background-color: #333;
+      color: #fff;
+    }
+
+    button {
+      background-color: red;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .event {
+      background-color: #111;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-radius: 5px;
+    }
+
+    .event input {
+      width: 100%;
+    }
+
+    .countdown {
+      font-size: 0.9rem;
+      color: #0f0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Burgie Events</h1>
+    <div id="eventList"></div>
+  </div>
+
+  <script>
+    let username = "";
+
+    function loadEvents() {
+      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
+      const tips = JSON.parse(localStorage.getItem("burgieTips") || "{}");
+      const now = new Date();
+      const list = document.getElementById("eventList");
+      list.innerHTML = "";
+
+      events.forEach((ev, i) => {
+        const eventTime = new Date(`${ev.date}T${ev.time}`);
+        const tipDeadline = new Date(eventTime.getTime() - 48 * 60 * 60 * 1000);
+        const userTips = tips[username] || {};
+        const alreadyTipped = userTips[i] !== undefined;
+        const tipValue = alreadyTipped ? userTips[i] : "";
+
+        let countdown = "";
+        const diff = tipDeadline - now;
+        if (diff > 0) {
+          const hours = Math.floor(diff / (1000 * 60 * 60));
+          const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          countdown = `Tipp möglich für: ${hours}h ${mins}m`;
+        }
+
+        list.innerHTML += `
+          <div class="event">
+            <b>${ev.title}</b><br>
+            ${ev.date} – ${ev.time}<br>
+            <div class="countdown">${diff > 0 ? countdown : "Tipp nicht mehr möglich"}</div>
+            ${alreadyTipped
+              ? `<p>Dein Tipp: <b>${tipValue} €</b></p>`
+              : diff > 0
+              ? `<input type="number" id="tip_${i}" placeholder="Tipp in €">
+                 <button onclick="submitTip(${i})">Tipp abgeben</button>`
+              : `<p style="color: gray;">Keine Tippabgabe mehr möglich.</p>`}
+          </div>
+        `;
+      });
+    }
+
+    function submitTip(index) {
+      const value = document.getElementById("tip_" + index).value;
+      if (!value) return alert("Bitte Tipp eingeben");
+      const tips = JSON.parse(localStorage.getItem("burgieTips") || "{}");
+      if (!tips[username]) tips[username] = {};
+      tips[username][index] = parseFloat(value);
+      localStorage.setItem("burgieTips", JSON.stringify(tips));
+      loadEvents();
+    }
+
+    window.onload = function () {
+      username = localStorage.getItem("burgieUser") || "";
+      if (username) {
+        document.getElementById("usernameInput").value = username;
+      }
+      loadEvents();
+    };
+  </script>
+</body>
+</html>

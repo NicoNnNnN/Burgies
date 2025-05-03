@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Adminbereich – Burgies</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { background: #000; color: #fff; font-family: sans-serif; margin: 0; padding: 2rem; }
+    .container { max-width: 700px; margin: auto; }
+    h1 { color: red; text-align: center; }
+    input, button {
+      width: 100%; padding: 1rem; margin: 0.5rem 0;
+      font-size: 1rem; border-radius: 5px; border: none; box-sizing: border-box;
+    }
+    input { background-color: #222; color: #fff; }
+    button { background-color: red; color: white; font-weight: bold; cursor: pointer; }
+    .event { background: #111; padding: 1rem; margin: 1rem 0; border-radius: 5px; }
+    .edit-buttons { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+    .edit-buttons button { flex: 1; padding: 0.5rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="login">
+      <h1>Admin Login</h1>
+      <input type="password" id="adminPw" placeholder="Admin-Passwort">
+      <button onclick="checkLogin()">Einloggen</button>
+      <p id="loginMsg"></p>
+    </div>
+
+    <div id="adminArea" class="hidden">
+      <h1>Burgie Adminbereich</h1>
+      <h2>Neues Event hinzufügen</h2>
+      <input type="text" id="eventTitle" placeholder="Titel des Events">
+      <input type="date" id="eventDate">
+      <input type="time" id="eventTime">
+      <button onclick="addEvent()">Event speichern</button>
+
+      <h2>Events verwalten</h2>
+      <div id="eventList"></div>
+    </div>
+  </div>
+
+  <script>
+    function checkLogin() {
+      const pw = document.getElementById("adminPw").value;
+      const msg = document.getElementById("loginMsg");
+
+      if (pw === "admin2025") {
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("adminArea").classList.remove("hidden");
+        loadEvents();
+      } else {
+        msg.innerText = "Falsches Passwort!";
+        msg.style.color = "red";
+      }
+    }
+
+    function addEvent() {
+      const title = document.getElementById("eventTitle").value.trim();
+      const date = document.getElementById("eventDate").value;
+      const time = document.getElementById("eventTime").value;
+      if (!title || !date || !time) return alert("Bitte Titel und Datum angeben!");
+
+      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
+      events.push({ title, date, time });
+      localStorage.setItem("burgieEvents", JSON.stringify(events));
+      loadEvents();
+    }
+
+    function loadEvents() {
+      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
+      const list = document.getElementById("eventList");
+      list.innerHTML = "";
+      events.forEach((ev, i) => {
+        list.innerHTML += `
+          <div class="event">
+            <h3>${ev.title}</h3>
+            <p>Datum: ${ev.date} – Uhrzeit: ${ev.time}</p>
+          </div>
+        `;
+      });
+    }
+  </script>
+</body>
+</html>
+    
