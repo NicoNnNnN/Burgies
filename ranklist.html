@@ -1,33 +1,96 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rangliste</title>
+  <meta charset="UTF-8" />
+  <title>Rangliste – Burgies</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
       background-color: #000;
       color: #fff;
       font-family: sans-serif;
-      text-align: center;
+      margin: 0;
+      display: flex;
     }
-    h1 {
+
+    /* Linkes Menü */
+    .sidebar {
+      width: 200px;
+      background-color: #111;
+      padding: 2rem 1rem;
+      box-sizing: border-box;
+      height: 100vh;
+    }
+
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
       color: red;
     }
-    .rankings {
-      margin-top: 20px;
+
+    .nav-link {
+      display: block;
+      margin: 1rem 0;
+      color: #ccc;
+      text-decoration: none;
     }
+
+    .nav-link:hover {
+      color: red;
+    }
+
+    /* Hauptbereich */
+    .main {
+      flex-grow: 1;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .rank-item {
+      margin: 1rem;
+      padding: 1rem;
+      background-color: #111;
+      border-radius: 5px;
+    }
+
+    /* Weitere Stile nach Bedarf */
   </style>
 </head>
 <body>
-  <h1>Rangliste</h1>
-  <div class="rankings">
-    <!-- Hier kannst du die Rangliste dynamisch einfügen -->
-    <p>Aktuelle Rangliste:</p>
-    <p>1. Spieler A</p>
-    <p>2. Spieler B</p>
-    <p>3. Spieler C</p>
-    <!-- Beispiel: Du kannst hier ein dynamisches System hinzufügen -->
+  <!-- Linkes Menü -->
+  <div class="sidebar">
+    <h2>Menü</h2>
+    <a href="home.html" class="nav-link">🏠 Home</a>
+    <a href="events.html" class="nav-link">📅 Events</a>
+    <a href="ranklist.html" class="nav-link">🏆 Rangliste</a>
+    <a href="admin.html" class="nav-link">🔒 Adminbereich</a>
   </div>
+
+  <!-- Hauptbereich -->
+  <div class="main">
+    <h1>Aktuelle Rangliste</h1>
+
+    <!-- Ranglisten-Positionen -->
+    <div class="rank-item">
+      <h3>1. Spieler A</h3>
+      <p>Gesamt: 250 Burgies 🍔</p>
+    </div>
+
+    <div class="rank-item">
+      <h3>2. Spieler B</h3>
+      <p>Gesamt: 200 Burgies 🍔</p>
+    </div>
+
+    <div class="rank-item">
+      <h3>3. Spieler C</h3>
+      <p>Gesamt: 150 Burgies 🍔</p>
+    </div>
+
+    <p id="statusMessage"></p>
+  </div>
+
+  <script>
+    // Weitere Logik für Ranglisten-Daten hinzufügen
+  </script>
 </body>
 </html>
