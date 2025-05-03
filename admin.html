@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>Adminbereich – Burgies</title>
+  <title>Admin Login – Burgies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body { background: #000; color: #fff; font-family: sans-serif; margin: 0; padding: 2rem; display: flex; }
@@ -28,41 +28,89 @@
     .nav-link:hover {
       color: red;
     }
-    .container {
+
+    /* Loginbereich */
+    .login-container {
+      flex-grow: 1;
+      padding: 2rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    .login-container h1 {
+      color: red;
+    }
+
+    input, button {
+      padding: 1rem;
+      margin: 0.5rem 0;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+      box-sizing: border-box;
+    }
+
+    input {
+      background-color: #222;
+      color: #fff;
+    }
+
+    button {
+      background-color: red;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #loginMessage {
+      color: red;
+    }
+
+    /* Adminbereich */
+    .admin-container {
       flex-grow: 1;
       max-width: 700px;
       margin-left: 220px;
+      display: none;
     }
-    h1 { color: red; text-align: center; }
-    input, button {
-      width: 100%; padding: 1rem; margin: 0.5rem 0;
-      font-size: 1rem; border-radius: 5px; border: none; box-sizing: border-box;
+
+    .admin-container h1 {
+      color: red;
+      text-align: center;
     }
-    input { background-color: #222; color: #fff; }
-    button { background-color: red; color: white; font-weight: bold; cursor: pointer; }
+
+    .admin-container input, .admin-container button {
+      width: 100%;
+    }
+
+    /* Event und Liste */
     .event { background: #111; padding: 1rem; margin: 1rem 0; border-radius: 5px; }
     .edit-buttons { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
     .edit-buttons button { flex: 1; padding: 0.5rem; }
-    /* Passwortschutz */
-    .password-container {
-      text-align: center;
-      padding: 50px;
-    }
   </style>
 </head>
 <body>
-  <!-- Passwortschutz -->
-  <div class="password-container" id="password-container">
-    <h2>Admin Login</h2>
+
+  <!-- Linkes Menü -->
+  <div class="sidebar">
+    <h2>Menü</h2>
+    <a href="home.html" class="nav-link">🏠 Home</a>
+    <a href="events.html" class="nav-link">📅 Events</a>
+    <a href="ranklist.html" class="nav-link">🏆 Rangliste</a>
+    <a href="admin.html" class="nav-link">🔒 Adminbereich</a>
+  </div>
+
+  <!-- Admin Login -->
+  <div class="login-container" id="login-container">
+    <h1>Admin Login</h1>
     <input type="password" id="adminPw" placeholder="Admin-Passwort">
     <button onclick="checkPassword()">Login</button>
     <p id="loginMessage"></p>
   </div>
 
-  <!-- Adminbereich -->
-  <div class="container" id="adminContainer" style="display: none;">
+  <!-- Adminbereich (wird nur angezeigt, wenn das Passwort korrekt ist) -->
+  <div class="admin-container" id="adminContainer">
     <h1>Burgie Adminbereich</h1>
-
     <h2>Neues Event hinzufügen</h2>
     <input type="text" id="eventTitle" placeholder="Titel des Events">
     <input type="date" id="eventDate">
@@ -75,24 +123,26 @@
 
   <script>
     // Passwort für den Adminbereich
-    const adminPassword = "admin2025";
+    const adminPassword = "admin2025";  // Admin-Passwort hier festgelegt
 
-    // Prüfen, ob das Passwort korrekt ist
+    // Funktion zur Passwortüberprüfung und Zugang gewähren
     function checkPassword() {
       const enteredPassword = document.getElementById("adminPw").value;
       const message = document.getElementById("loginMessage");
 
       if (enteredPassword === adminPassword) {
-        document.getElementById("password-container").style.display = "none";
+        // Wenn das Passwort korrekt ist, den Adminbereich anzeigen
+        document.getElementById("login-container").style.display = "none";
         document.getElementById("adminContainer").style.display = "block";
         loadEvents();  // Events laden
       } else {
+        // Falsches Passwort
         message.innerText = "Falsches Passwort!";
         message.style.color = "red";
       }
     }
 
-    // Events laden
+    // Funktion zum Laden der Events
     function loadEvents() {
       const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
       const eventList = document.getElementById("eventList");
@@ -149,5 +199,6 @@
       loadEvents();  // Events neu laden
     }
   </script>
+
 </body>
 </html>
