@@ -40,6 +40,31 @@
     }
     input { background-color: #222; color: #fff; }
     button { background-color: red; color: white; font-weight: bold; cursor: pointer; }
+    .event { background: #111; padding: 1rem; margin: 1rem 0; border-radius: 5px; }
+    .edit-buttons { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+    .edit-buttons button { flex: 1; padding: 0.5rem; }
+
+    /* Linkes Menü */
+    .menu {
+      position: fixed;
+      right: 10px;
+      top: 10px;
+      background-color: #111;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .menu a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 8px;
+    }
+
+    .menu a:hover {
+      background-color: red;
+    }
+
   </style>
 </head>
 <body>
@@ -55,6 +80,74 @@
   <!-- Adminbereich -->
   <div class="container">
     <h1>Burgie Adminbereich</h1>
-    <!-- Dein Adminbereich-Inhalt hier -->
+
+    <h2>Neues Event hinzufügen</h2>
+    <input type="text" id="eventTitle" placeholder="Titel des Events">
+    <input type="date" id="eventDate">
+    <input type="time" id="eventTime">
+    <button onclick="addEvent()">Event speichern</button>
+
+    <h2>Verfügbare Events</h2>
+    <div id="eventList"></div>
   </div>
+
+  <script>
+    // Prüfen, ob bereits Events im Local Storage gespeichert sind
+    function loadEvents() {
+      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
+      const eventList = document.getElementById("eventList");
+      eventList.innerHTML = "";
+      events.forEach((event, index) => {
+        eventList.innerHTML += `
+          <div class="event">
+            <h3>${event.title}</h3>
+            <p>Datum: ${event.date} – Uhrzeit: ${event.time}</p>
+            <div class="edit-buttons">
+              <button onclick="editEvent(${index})">Bearbeiten</button>
+              <button onclick="deleteEvent(${index})">Löschen</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function addEvent() {
+      const title = document.getElementById("eventTitle").value.trim();
+      const date = document.getElementById("eventDate").value;
+      const time = document.getElementById("eventTime").value;
+
+      if (!title || !date || !time) {
+        alert("Bitte alle Felder ausfüllen!");
+        return;
+      }
+
+      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
+      events.push({ title, date, time });
+      localStorage.setItem("burgieEvents", JSON.stringify(events));
+      loadEvents(); // Events neu laden
+    }
+
+    function editEvent(index) {
+      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
+      const event = events[index];
+
+      document.getElementById("eventTitle").value = event.title;
+      document.getElementById("eventDate").value = event.date;
+      document.getElementById("eventTime").value = event.time;
+
+      // Event löschen und neu anlegen
+      deleteEvent(index);
+    }
+
+    function deleteEvent(index) {
+      const events = JSON.parse(localStorage.getItem("burgieEvents") || "[]");
+      events.splice(index, 1);
+      localStorage.setItem("burgieEvents", JSON.stringify(events));
+      loadEvents(); // Events neu laden
+    }
+
+    // Initiales Laden der Events
+    loadEvents();
+  </script>
 </body>
+</html>
