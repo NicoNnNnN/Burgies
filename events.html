@@ -6,6 +6,50 @@
   <title>Events – Burgies</title>
   <link rel="stylesheet" href="style.css" />
   <script type="module" src="events.js"></script>
+  <style>
+    .event-card {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 10px #222;
+    }
+    .event-card h3 {
+      color: red;
+      margin-top: 0;
+    }
+    .event-card p {
+      margin: 0.3rem 0;
+    }
+    .event-card input[type="number"] {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      border: none;
+      background: #222;
+      color: white;
+    }
+    .event-card button {
+      background: red;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      margin-top: 0.5rem;
+      cursor: pointer;
+    }
+    #filter {
+      margin-bottom: 1.5rem;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+      background: #222;
+      color: white;
+    }
+  </style>
 </head>
 <body>
   <nav class="menu">
@@ -17,6 +61,11 @@
 
   <div class="main">
     <h1>Aktuelle Events</h1>
+    <select id="filter">
+      <option value="upcoming">Anstehend</option>
+      <option value="past">Vergangen</option>
+    </select>
+
     <div id="eventsContainer">
       <!-- Hier werden Events dynamisch geladen -->
     </div>
