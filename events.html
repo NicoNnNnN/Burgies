@@ -58,6 +58,21 @@
       padding: 80px 20px 20px 20px;
     }
 
+    h1 {
+      margin-top: 0;
+      transition: color 0.3s;
+    }
+
+    #filter {
+      margin-bottom: 1.5rem;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+      background: #222;
+      color: white;
+    }
+
     .event-card {
       background: #1a1a1a;
       padding: 1rem;
@@ -95,16 +110,6 @@
       margin-top: 0.5rem;
       cursor: pointer;
     }
-
-    #filter {
-      margin-bottom: 1.5rem;
-      padding: 0.5rem;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: none;
-      background: #222;
-      color: white;
-    }
   </style>
 </head>
 <body>
@@ -112,7 +117,7 @@
   <!-- Hamburger-Menübutton -->
   <button class="menu-button" onclick="toggleMenu()">☰</button>
 
-  <!-- Slide-Navigation -->
+  <!-- Slide-Menü -->
   <div class="sidebar" id="sidebar">
     <a href="home.html">Home</a>
     <a href="events.html" class="active">Tippen</a>
@@ -122,7 +127,8 @@
 
   <!-- Hauptinhalt -->
   <div class="main">
-    <h1>Aktuelle Events</h1>
+    <h1 id="eventHeadline">Eventliste – Viel Spaß beim Tippen!</h1>
+
     <select id="filter">
       <option value="upcoming">Anstehend</option>
       <option value="past">Vergangen</option>
@@ -133,14 +139,28 @@
     </div>
   </div>
 
-  <!-- Slide-Menü-Logik -->
+  <!-- Menü- und Überschrift-Logik -->
   <script>
     function toggleMenu() {
       document.getElementById("sidebar").classList.toggle("open");
     }
+
+    // Buntes Blinken der Überschrift
+    const title = document.getElementById("eventHeadline");
+    const blinkColors = ["yellow", "cyan", "lime", "orange", "red"];
+    let i = 0;
+
+    const blink = setInterval(() => {
+      title.style.color = blinkColors[i];
+      i++;
+      if (i >= blinkColors.length) {
+        clearInterval(blink);
+        title.style.color = "red";
+      }
+    }, 400);
   </script>
 
-  <!-- JavaScript -->
+  <!-- JavaScript-Module -->
   <script type="module" src="events.js"></script>
   <script type="module" src="events_final.js"></script>
 </body>
