@@ -23,7 +23,7 @@ const db = getFirestore(app);
 const tbody = document.querySelector("#rankingTable tbody");
 
 async function loadRankings() {
-  const snapshot = await getDocs(collection(db, "users"));
+  const snapshot = await getDocs(collection(db, "burgies"));
   const users = [];
 
   snapshot.forEach(doc => {
