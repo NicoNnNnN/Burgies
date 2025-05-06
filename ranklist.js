@@ -1,9 +1,9 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import {
   getFirestore,
   collection,
   getDocs
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 
 // Firebase-Konfiguration
 const firebaseConfig = {
@@ -12,44 +12,82 @@ const firebaseConfig = {
   projectId: "burgies-34fca",
   storageBucket: "burgies-34fca.appspot.com",
   messagingSenderId: "1089225214218",
-  appId: "1:1089225214218:web:c2b33c7fb58b0defb112f3",
-  measurementId: "G-3RJ1577EKL"
+  appId: "1:1089225214218:web:c2b33c7fb58b0defb112f3"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Tabelle im HTML finden
-const tbody = document.querySelector("#rankingTable tbody");
+// Zeitraum-Auswahl
+const select = document.createElement("select");
+select.innerHTML = `
+  <option value="daily">Täglich</option>
+  <option value="weekly">Wöchentlich</option>
+  <option value="monthly">Monatlich</option>
+  <option value="total">Gesamt</option>
+`;
+document.body.insertBefore(select, document.getElementById("rankingTable"));
 
-async function loadRankings() {
-  const snapshot = await getDocs(collection(db, "burgies"));
-  const users = [];
+// Tabelle aktualisieren bei Auswahl
+select.addEventListener("change", () => {
+  loadRanking(select.value);
+});
 
-  snapshot.forEach(doc => {
-    const data = doc.data();
-    users.push({
-      name: doc.id,
-      total: data.total || 0
-    });
-  });
+loadRanking("daily");
 
-  users.sort((a, b) => b.total - a.total);
-
+async function loadRanking(type) {
+  const tbody = document.getElementById("rankingTable").querySelector("tbody");
   tbody.innerHTML = "";
 
-  users.forEach((user, index) => {
+  const snapshot = await getDocs(collection(db, "burgies"));
+  const ranking = [];
+
+  for (const docSnap of snapshot.docs) {
+    const username = docSnap.id;
+
+    if (type === "total") {
+      const ref = collection(db, `burgies/${username}/total`);
+      const totalSnap = await getDocs(ref);
+      let points = 0;
+      totalSnap.forEach(d => {
+        points += d.data().points || 0;
+      });
+      ranking.push({ username, points });
+    } else {
+      const now = new Date();
+      let key = "";
+
+      if (type === "daily") {
+        key = now.toISOString().split("T")[0];
+      } else if (type === "weekly") {
+        const temp = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+        const dayNum = temp.getUTCDay() || 7;
+        temp.setUTCDate(temp.getUTCDate() + 4 - dayNum);
+        const yearStart = new Date(Date.UTC(temp.getUTCFullYear(), 0, 1));
+        const weekNum = Math.ceil((((temp - yearStart) / 86400000) + 1) / 7);
+        key = `KW${weekNum.toString().padStart(2, "0")}-${now.getFullYear()}`;
+      } else if (type === "monthly") {
+        key = now.toISOString().slice(0, 7);
+      }
+
+      const sub = await getDocs(collection(db, `burgies/${username}/${type}`));
+      sub.forEach(d => {
+        if (d.id === key && d.data().points > 0) {
+          ranking.push({ username, points: d.data().points });
+        }
+      });
+    }
+  }
+
+  ranking.sort((a, b) => b.points - a.points);
+
+  ranking.forEach((entry, i) => {
     const row = document.createElement("tr");
-
-    let platzIcon = (index === 0) ? "🥇" : (index === 1) ? "🥈" : (index === 2) ? "🥉" : (index + 1);
-
     row.innerHTML = `
-      <td>${platzIcon}</td>
-      <td>${user.name}</td>
-      <td>${user.total} 🍔</td>
+      <td>${i + 1}</td>
+      <td>${entry.username}</td>
+      <td>${entry.points}</td>
     `;
     tbody.appendChild(row);
   });
 }
-
-loadRankings();
