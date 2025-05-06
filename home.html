@@ -2,62 +2,60 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Burgies Home</title>
+  <title>Willkommen bei Burgies</title>
   <link rel="stylesheet" href="style.css" />
   <script type="module" src="home.js"></script>
 </head>
 <body>
-  <div class="sidebar">
-    <button onclick="toggleMenu()">☰ Menü</button>
-    <nav id="navLinks" class="hidden">
-      <a href="home.html">Start</a>
-      <a href="events.html">Events</a>
-      <a href="ranklist.html">Rangliste</a>
-      <a href="admin.html">Admin</a>
-    </nav>
-  </div>
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="events.html">Tippen</a>
+    <a href="ranklist.html">Rangliste</a>
+    <a href="admin.html">Admin</a>
+  </nav>
 
-  <div class="main-content">
-    <h1 id="greeting">Willkommen zurück!</h1>
+  <div class="container">
+    <div id="greeting"></div>
 
     <div class="burgie-box">
-      <h2>Deine Burgies:</h2>
-      <p><span id="burgieCount">...</span> 🍔</p>
-      <p id="lastBonus">Letzter Bonus: ...</p>
+      Du hast aktuell <span id="burgies">0</span> Burgies!
     </div>
 
-    <section class="info-section">
-      <h2>So funktioniert's</h2>
-      <ol>
-        <li>Passwort eingeben und einloggen</li>
-        <li>Event auswählen und Tipp abgeben</li>
-        <li>Nach dem Event Punkte sammeln</li>
-      </ol>
-    </section>
+    <h2>Wie funktioniert Burgies?</h2>
+    <p>
+      Jeden Tag kannst du deinen Tipp zum Tagesgewinn abgeben. Nach dem Event trägt der Admin den echten Gewinn ein.
+      Je nachdem, wie nah du am tatsächlichen Ergebnis lagst, bekommst du Burgies. Es gilt:
+    </p>
 
-    <section class="burgie-table">
-      <h2>Burgie-Verteilung</h2>
+    <div class="table-box">
       <table>
-        <tr><th>Abweichung</th><th>Burgies</th></tr>
-        <tr><td>±0 €</td><td>50</td></tr>
-        <tr><td>±50 €</td><td>45</td></tr>
-        <tr><td>±100 €</td><td>40</td></tr>
-        <tr><td>±150 €</td><td>35</td></tr>
-        <tr><td>±200 €</td><td>30</td></tr>
-        <tr><td>±250 €</td><td>25</td></tr>
-        <tr><td>±300 €</td><td>20</td></tr>
-        <tr><td>±350 €</td><td>15</td></tr>
-        <tr><td>±400 €</td><td>10</td></tr>
-        <tr><td>±450 €</td><td>8</td></tr>
-        <tr><td>±500 €</td><td>6</td></tr>
-        <tr><td>±550 €</td><td>5</td></tr>
-        <tr><td>±600 €</td><td>4</td></tr>
-        <tr><td>±650 €</td><td>3</td></tr>
-        <tr><td>±700 €</td><td>2</td></tr>
-        <tr><td>±750 €</td><td>1</td></tr>
+        <thead>
+          <tr>
+            <th>Abweichung</th>
+            <th>Burgies</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>±0 €</td><td>50</td></tr>
+          <tr><td>±50 €</td><td>45</td></tr>
+          <tr><td>±100 €</td><td>40</td></tr>
+          <tr><td>±150 €</td><td>35</td></tr>
+          <tr><td>±200 €</td><td>30</td></tr>
+          <tr><td>±250 €</td><td>25</td></tr>
+          <tr><td>±300 €</td><td>20</td></tr>
+          <tr><td>±350 €</td><td>15</td></tr>
+          <tr><td>±400 €</td><td>10</td></tr>
+          <tr><td>±450–750 €</td><td>5</td></tr>
+          <tr><td>Ab > 750 €</td><td>0</td></tr>
+        </tbody>
       </table>
-    </section>
+    </div>
+
+    <h3>Bonus-Burgies</h3>
+    <p>
+      Der <strong>genaueste Tipp</strong> des Tages bekommt zusätzlich <strong>+5 Bonus-Burgies</strong>, 
+      sofern mehrere Spieler sehr nah beieinander liegen. So lohnt sich auch der knappe Sieg!
+    </p>
   </div>
 </body>
 </html>
