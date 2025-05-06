@@ -22,7 +22,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const username = localStorage.getItem("username") || "Gast";
-const eventsContainer = document.getElementById("eventsContainer");
+const eventsContainer = document.getElementById("eventContainer");
 const filterDropdown = document.getElementById("filter");
 
 filterDropdown.addEventListener("change", loadEvents);
