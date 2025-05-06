@@ -103,3 +103,4 @@ async function loadTippers(eventId) {
 }
 
 loadEvents();
+console.log("✅ events.js wurde geladen");
