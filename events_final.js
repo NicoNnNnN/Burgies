@@ -96,7 +96,7 @@ window.submitTip = async function (eventId) {
 
 async function loadTippers(eventId) {
   const tipListEl = document.getElementById("tipList-" + eventId);
-  const tipDocs = await getDocs(collection(db, "events", eventId, "tips"));
+  const tipDocs = await getDocs(collection(db, "Events", eventId, "tips"));
   const names = [];
   tipDocs.forEach(doc => names.push(doc.id));
   tipListEl.innerHTML = `<p><strong>Schon getippt:</strong> ${names.length > 0 ? names.join(', ') : 'Noch niemand'}</p>`;
