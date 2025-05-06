@@ -2,21 +2,102 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>Willkommen bei Burgies</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Burgies – Home</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Sidebar Dropdown */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      width: 200px;
+      background-color: #111;
+      padding-top: 1rem;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+    .sidebar.active {
+      transform: translateX(0);
+    }
+    .sidebar a {
+      display: block;
+      color: #ccc;
+      text-decoration: none;
+      padding: 1rem;
+    }
+    .sidebar a:hover {
+      color: red;
+    }
+    .menu-toggle {
+      background: none;
+      border: none;
+      color: red;
+      font-size: 2rem;
+      padding: 1rem;
+      cursor: pointer;
+    }
+
+    .content {
+      padding: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    #greeting {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .burgie-box {
+      background-color: red;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+    th, td {
+      padding: 0.5rem;
+      text-align: center;
+      border: 1px solid #444;
+    }
+    th {
+      background-color: #222;
+    }
+    h2, h3 {
+      color: red;
+    }
+  </style>
   <script type="module" src="home.js"></script>
 </head>
 <body>
-  <nav>
-    <a href="home.html">Home</a>
-    <a href="events.html">Tippen</a>
-    <a href="ranklist.html">Rangliste</a>
-    <a href="admin.html">Admin</a>
-  </nav>
 
-  <div class="container">
+  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+  <div class="sidebar" id="sidebar">
+    <a href="home.html">🏠 Home</a>
+    <a href="events.html">📅 Events</a>
+    <a href="ranklist.html">🏆 Rangliste</a>
+    <a href="admin.html">🔒 Admin</a>
+  </div>
+
+  <div class="content">
     <div id="greeting"></div>
-
     <div class="burgie-box">
       Du hast aktuell <span id="burgies">0</span> Burgies!
     </div>
@@ -24,38 +105,40 @@
     <h2>Wie funktioniert Burgies?</h2>
     <p>
       Jeden Tag kannst du deinen Tipp zum Tagesgewinn abgeben. Nach dem Event trägt der Admin den echten Gewinn ein.
-      Je nachdem, wie nah du am tatsächlichen Ergebnis lagst, bekommst du Burgies. Es gilt:
+      Je nachdem, wie nah du am tatsächlichen Ergebnis lagst, bekommst du Burgies:
     </p>
 
-    <div class="table-box">
-      <table>
-        <thead>
-          <tr>
-            <th>Abweichung</th>
-            <th>Burgies</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>±0 €</td><td>50</td></tr>
-          <tr><td>±50 €</td><td>45</td></tr>
-          <tr><td>±100 €</td><td>40</td></tr>
-          <tr><td>±150 €</td><td>35</td></tr>
-          <tr><td>±200 €</td><td>30</td></tr>
-          <tr><td>±250 €</td><td>25</td></tr>
-          <tr><td>±300 €</td><td>20</td></tr>
-          <tr><td>±350 €</td><td>15</td></tr>
-          <tr><td>±400 €</td><td>10</td></tr>
-          <tr><td>±450–750 €</td><td>5</td></tr>
-          <tr><td>Ab > 750 €</td><td>0</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <table>
+      <thead>
+        <tr><th>Abweichung</th><th>Burgies</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>±0 €</td><td>50</td></tr>
+        <tr><td>±50 €</td><td>45</td></tr>
+        <tr><td>±100 €</td><td>40</td></tr>
+        <tr><td>±150 €</td><td>35</td></tr>
+        <tr><td>±200 €</td><td>30</td></tr>
+        <tr><td>±250 €</td><td>25</td></tr>
+        <tr><td>±300 €</td><td>20</td></tr>
+        <tr><td>±350 €</td><td>15</td></tr>
+        <tr><td>±400 €</td><td>10</td></tr>
+        <tr><td>±450–750 €</td><td>5</td></tr>
+        <tr><td>Ab > 750 €</td><td>0</td></tr>
+      </tbody>
+    </table>
 
     <h3>Bonus-Burgies</h3>
     <p>
-      Der <strong>genaueste Tipp</strong> des Tages bekommt zusätzlich <strong>+5 Bonus-Burgies</strong>, 
-      sofern mehrere Spieler sehr nah beieinander liegen. So lohnt sich auch der knappe Sieg!
+      Der <strong>genaueste Tipp</strong> des Tages bekommt zusätzlich <strong>+5 Bonus-Burgies</strong>,
+      sofern mehrere Spieler sehr nah beieinander liegen.
     </p>
   </div>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("sidebar").classList.toggle("active");
+    }
+  </script>
+
 </body>
 </html>
