@@ -2,29 +2,135 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adminbereich</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin – Burgie</title>
   <link rel="stylesheet" href="style.css" />
-  <script type="module" src="admin.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js" type="module"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js" type="module"></script>
+  <script src="admin.js" type="module" defer></script>
+  <style>
+    body {
+      background-color: #121212;
+      color: #fff;
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .menu-button {
+      background-color: #ff4444;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 18px;
+      cursor: pointer;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -220px;
+      width: 200px;
+      height: 100%;
+      background-color: #1e1e1e;
+      padding-top: 60px;
+      transition: left 0.3s;
+      z-index: 999;
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      padding: 16px;
+      text-decoration: none;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: #333;
+    }
+
+    .main {
+      margin-left: 0;
+      padding: 80px 20px 20px 20px;
+    }
+
+    form input {
+      padding: 8px;
+      margin: 5px 10px 5px 0;
+    }
+
+    form button {
+      background-color: #ff4444;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    #eventList li {
+      background-color: #1e1e1e;
+      border: 1px solid #444;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+    }
+
+    #eventList button {
+      margin-left: 5px;
+      background-color: #ff4444;
+      color: white;
+      border: none;
+      padding: 5px 8px;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+
+    input[type="number"] {
+      width: 140px;
+    }
+  </style>
 </head>
 <body>
-  <nav>
+
+  <!-- Hamburger-Menübutton -->
+  <button class="menu-button" onclick="toggleMenu()">☰</button>
+
+  <!-- Sidebar Navigation -->
+  <div class="sidebar" id="sidebar">
     <a href="home.html">Home</a>
     <a href="events.html">Events</a>
-    <a href="ranklist.html">Rangliste</a>
+    <a href="rangliste.html">Rangliste</a>
     <a href="admin.html" class="active">Admin</a>
-  </nav>
+  </div>
 
-  <div class="container">
-    <h1>Adminbereich</h1>
+  <!-- Hauptinhalt -->
+  <div class="main">
+    <h2>Event hinzufügen oder bearbeiten</h2>
     <form id="eventForm">
       <input type="text" id="title" placeholder="Titel" required />
       <input type="date" id="date" required />
       <input type="time" id="time" required />
       <button type="submit">Speichern</button>
     </form>
-    <h2>Bestehende Events</h2>
+
+    <h2>Alle Events</h2>
     <ul id="eventList"></ul>
   </div>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("sidebar").classList.toggle("open");
+    }
+  </script>
+
 </body>
 </html>
