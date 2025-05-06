@@ -41,7 +41,7 @@ function isTipAllowed(dateStr, timeStr) {
 
 async function loadEvents() {
   eventsContainer.innerHTML = "";
-  const snapshot = await getDocs(collection(db, "Events"));
+  const snapshot = await getDocs(collection(db, "events"));
   const filter = filterDropdown.value;
 
   snapshot.forEach(async (docSnap) => {
@@ -84,7 +84,7 @@ window.submitTip = async function (eventId) {
   const value = parseFloat(input.value);
   if (isNaN(value)) return alert("Bitte gib einen gültigen Tipp ein.");
 
-  const tipDocs = await getDocs(collection(db, "Events", eventId, "tips"));
+  const tipRef = doc(db, "events", eventId, "tips", username);
   await setDoc(tipRef, {
     value,
     timestamp: new Date().toISOString()
@@ -96,7 +96,7 @@ window.submitTip = async function (eventId) {
 
 async function loadTippers(eventId) {
   const tipListEl = document.getElementById("tipList-" + eventId);
-  const tipDocs = await getDocs(collection(db, "Events", eventId, "tips"));
+  const tipDocs = await getDocs(collection(db, "events", eventId, "tips"));
   const names = [];
   tipDocs.forEach(doc => names.push(doc.id));
   tipListEl.innerHTML = `<p><strong>Schon getippt:</strong> ${names.length > 0 ? names.join(', ') : 'Noch niemand'}</p>`;
