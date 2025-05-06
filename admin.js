@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import {
   getFirestore, collection, getDocs, doc, deleteDoc,
-  updateDoc, addDoc, setDoc, getDoc
+  updateDoc, addDoc, setDoc, getDoc, increment
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 // Firebase-Konfiguration
@@ -14,7 +14,6 @@ const firebaseConfig = {
   appId: "1:1089225214218:web:c2b33c7fb58b0defb112f3"
 };
 
-// Initialisieren
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -32,17 +31,16 @@ async function loadEvents() {
     const data = docSnap.data();
     const li = document.createElement("li");
     li.innerHTML = `
-      <strong>${data.title}</strong> – ${data.date} um ${data.time}
-      <input type="number" id="actual-${docSnap.id}" placeholder="Tatsächlicher Gewinn" />
+      <strong>${data.title}</strong> â ${data.date} um ${data.time}
+      <input type="number" id="actual-${docSnap.id}" placeholder="TatsÃ¤chlicher Gewinn" />
       <button onclick="enterActualWin('${docSnap.id}')">Auswerten</button>
       <button onclick="editEvent('${docSnap.id}', '${data.title}', '${data.date}', '${data.time}')">Bearbeiten</button>
-      <button onclick="deleteEvent('${docSnap.id}')">Löschen</button>
+      <button onclick="deleteEvent('${docSnap.id}')">LÃ¶schen</button>
     `;
     eventList.appendChild(li);
   });
 }
 
-// Formular abschicken
 eventForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const title = document.getElementById("title").value.trim();
@@ -50,14 +48,13 @@ eventForm.addEventListener("submit", async (e) => {
   const time = document.getElementById("time").value;
 
   if (!title || !date || !time) {
-    alert("Bitte fülle alle Felder aus.");
+    alert("Bitte fÃ¼lle alle Felder aus.");
     return;
   }
 
   try {
     if (editId) {
       await updateDoc(doc(db, "events", editId), { title, date, time });
-      console.log("✏️ Event aktualisiert:", editId);
       editId = null;
     } else {
       await addDoc(collection(db, "events"), {
@@ -66,24 +63,21 @@ eventForm.addEventListener("submit", async (e) => {
         time,
         createdAt: Date.now()
       });
-      console.log("✅ Neuer Event gespeichert:", title);
     }
 
     eventForm.reset();
     loadEvents();
   } catch (err) {
-    console.error("❌ Fehler beim Speichern:", err);
+    console.error("Fehler beim Speichern:", err);
     alert("Fehler beim Speichern. Siehe Konsole.");
   }
 });
 
-// Event löschen
 window.deleteEvent = async (id) => {
   await deleteDoc(doc(db, "events", id));
   loadEvents();
 };
 
-// Event bearbeiten
 window.editEvent = (id, title, date, time) => {
   document.getElementById("title").value = title;
   document.getElementById("date").value = date;
@@ -91,18 +85,16 @@ window.editEvent = (id, title, date, time) => {
   editId = id;
 };
 
-// Tatsächlichen Gewinn eintragen
 window.enterActualWin = async (eventId) => {
   const input = document.getElementById(`actual-${eventId}`);
   const actual = parseFloat(input.value);
-  if (isNaN(actual)) return alert("Bitte gültigen Gewinn eingeben.");
+  if (isNaN(actual)) return alert("Bitte gÃ¼ltigen Gewinn eingeben.");
 
   await setDoc(doc(db, "events", eventId), { actual }, { merge: true });
   await calculateBurgies(eventId, actual);
   alert("Gewinn gespeichert und Burgies berechnet!");
 };
 
-// Burgie-Punkte berechnen
 async function calculateBurgies(eventId, actual) {
   const tipsSnap = await getDocs(collection(db, "events", eventId, "tips"));
   let closestUser = null;
@@ -144,15 +136,48 @@ async function calculateBurgies(eventId, actual) {
   });
 
   for (const u of userPoints) {
-    const ref = doc(db, "burgies", u.user);
-    const prev = await getDoc(ref);
-    const oldTotal = prev.exists() && prev.data().total ? prev.data().total : 0;
-
-    await setDoc(ref, {
-      [eventId]: u.points,
-      total: oldTotal + u.points
-    }, { merge: true });
+    await updateBurgies(u.user, u.points);
   }
+}
+
+// Burgies nach Struktur speichern
+async function updateBurgies(username, punkte) {
+  const now = new Date();
+
+  const dailyKey = now.toISOString().split("T")[0];
+  const week = getWeek(now);
+  const weeklyKey = `KW${week}-${now.getFullYear()}`;
+  const monthlyKey = now.toISOString().slice(0, 7);
+
+  const basePath = `burgies/${username}`;
+
+  await updateOrCreate(`${basePath}/total/sum`, "points", punkte);
+  await updateOrCreate(`${basePath}/daily/${dailyKey}`, "points", punkte);
+  await updateOrCreate(`${basePath}/weekly/${weeklyKey}`, "points", punkte);
+  await updateOrCreate(`${basePath}/monthly/${monthlyKey}`, "points", punkte);
+}
+
+async function updateOrCreate(path, field, amount) {
+  const ref = doc(db, path);
+  const snap = await getDoc(ref);
+  if (snap.exists()) {
+    await updateDoc(ref, {
+      [field]: increment(amount)
+    });
+  } else {
+    await setDoc(ref, {
+      [field]: amount
+    });
+  }
+}
+
+function getWeek(date) {
+  const temp = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = temp.getUTCDay() || 7;
+  temp.setUTCDate(temp.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(temp.getUTCFullYear(), 0, 1));
+  const weekNum = Math.ceil((((temp - yearStart) / 86400000) + 1) / 7);
+  return weekNum.toString().padStart(2, "0");
 }
 
 // Start
