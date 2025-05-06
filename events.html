@@ -2,92 +2,114 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Events – Burgies</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Events – Burgie</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
+  <script src="firebase-config.js" defer></script>
+  <script src="events.js" defer></script>
+  <script src="auth.js" defer></script>
   <style>
-    .event-card {
-      background: #1a1a1a;
-      padding: 1rem;
-      border-radius: 1rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 0 10px #222;
-    }
-    .event-card h3 {
-      color: red;
-      margin-top: 0;
-    }
-    .event-card p {
-      margin: 0.3rem 0;
-    }
-    .event-card input[type="number"] {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      border-radius: 5px;
-      border: none;
-      background: #222;
-      color: white;
-    }
-    .event-card button {
-      background: red;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
-      color: white;
-      font-weight: bold;
-      margin-top: 0.5rem;
-      cursor: pointer;
-    }
-    #filter {
-      margin-bottom: 1.5rem;
-      padding: 0.5rem;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: none;
-      background: #222;
-      color: white;
+    body {
+      background-color: #121212;
+      color: #fff;
+      margin: 0;
+      font-family: 'Arial', sans-serif;
     }
 
-    .menu {
-      background: #111;
-      padding: 1rem;
-      display: flex;
-      gap: 1rem;
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200px;
+      height: 100%;
+      background-color: #1e1e1e;
+      padding-top: 60px;
     }
 
-    .menu a {
+    .sidebar a {
+      display: block;
       color: white;
+      padding: 16px;
       text-decoration: none;
-      font-weight: bold;
+    }
+
+    .sidebar a:hover {
+      background-color: #333;
     }
 
     .main {
-      padding: 2rem;
+      margin-left: 220px;
+      padding: 20px;
+    }
+
+    .greeting {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .event-card {
+      background-color: #1e1e1e;
+      border: 1px solid #444;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+
+    .event-card h3 {
+      margin-top: 0;
+    }
+
+    .countdown {
+      color: #ff4444;
+      font-weight: bold;
+    }
+
+    .tip-section input {
+      padding: 8px;
+      width: 100px;
+      margin-right: 10px;
+    }
+
+    .tip-section button {
+      background-color: #ff4444;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .tip-section button:disabled {
+      background-color: #555;
+    }
+
+    .tipped-users {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #ccc;
     }
   </style>
 </head>
 <body>
-  <nav class="menu">
+
+  <!-- Sidebar Navigation -->
+  <div class="sidebar">
     <a href="home.html">Home</a>
-    <a href="events.html">Tippen</a>
-    <a href="ranklist.html">Rangliste</a>
+    <a href="events.html">Events</a>
+    <a href="rangliste.html">Rangliste</a>
     <a href="admin.html">Admin</a>
-  </nav>
+  </div>
 
+  <!-- Main Content -->
   <div class="main">
-    <h1>Aktuelle Events</h1>
-    <select id="filter">
-      <option value="upcoming">Anstehend</option>
-      <option value="past">Vergangen</option>
-    </select>
+    <div class="greeting">Hey <span id="usernameDisplay">Gast</span>!</div>
 
-    <div id="eventsContainer">
-      <!-- Events werden hier dynamisch geladen -->
+    <div id="eventContainer">
+      <!-- Dynamische Events werden hier eingefügt -->
     </div>
   </div>
 
-  <!-- WICHTIG: JavaScript erst am Ende laden -->
-  <script type="module" src="events_final.js"></script>
 </body>
 </html>
