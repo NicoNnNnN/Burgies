@@ -58,10 +58,19 @@
       padding: 1rem;
     }
 
+    select#rankType {
+      margin-top: 1rem;
+      padding: 0.5rem;
+      background-color: #111;
+      color: white;
+      border: 1px solid #444;
+      font-size: 1rem;
+    }
+
     .ranking-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 2rem;
+      margin-top: 1rem;
     }
 
     .ranking-table th, .ranking-table td {
@@ -98,6 +107,16 @@
 
   <div class="content">
     <h1>Rangliste</h1>
+
+    <!-- Auswahlfeld für Ranglisten-Typ -->
+    <select id="rankType">
+      <option value="daily">Täglich</option>
+      <option value="weekly">Wöchentlich</option>
+      <option value="monthly">Monatlich</option>
+      <option value="total">Gesamt</option>
+    </select>
+
+    <!-- Tabelle -->
     <table class="ranking-table" id="rankingTable">
       <thead>
         <tr>
