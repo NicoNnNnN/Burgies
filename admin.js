@@ -1,5 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getFirestore, collection, getDocs, deleteDoc, doc, updateDoc, addDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import {
+  getFirestore, collection, getDocs, deleteDoc, doc, updateDoc, addDoc, setDoc, getDoc
+} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCW0-D2-mC43_HIimc_hfB1GoDqIILqg00",
@@ -73,6 +75,7 @@ window.enterActualWin = async (eventId) => {
   const input = document.getElementById(`actual-${eventId}`);
   const actualWin = parseFloat(input.value);
   if (isNaN(actualWin)) return alert("Bitte gib einen gültigen Gewinn ein.");
+
   await setDoc(doc(db, "events", eventId), { actual: actualWin }, { merge: true });
   await calculateBurgies(eventId, actualWin);
   alert("Gewinn gespeichert und Burgies berechnet!");
@@ -80,15 +83,16 @@ window.enterActualWin = async (eventId) => {
 
 async function calculateBurgies(eventId, actual) {
   const tipsSnap = await getDocs(collection(db, "events", eventId, "tips"));
-  let closest = null;
+  let closestUser = null;
   let minDiff = Infinity;
-  const pointsMap = new Map();
+  const userPoints = [];
 
   tipsSnap.forEach((tipDoc) => {
-    const data = tipDoc.data();
-    const diff = Math.abs(data.value - actual);
+    const { value } = tipDoc.data();
+    const diff = Math.abs(value - actual);
     let points = 0;
-    if (diff <= 0) points = 50;
+
+    if (diff === 0) points = 50;
     else if (diff <= 50) points = 45;
     else if (diff <= 100) points = 40;
     else if (diff <= 150) points = 35;
@@ -105,23 +109,29 @@ async function calculateBurgies(eventId, actual) {
     else if (diff <= 700) points = 2;
     else if (diff <= 750) points = 1;
 
-    pointsMap.set(tipDoc.id, points);
+    userPoints.push({ user: tipDoc.id, diff, points });
 
     if (diff < minDiff) {
       minDiff = diff;
-      closest = tipDoc.id;
+      closestUser = tipDoc.id;
     }
   });
 
-  // Bonuspunkte für den besten Tipper
-  if (closest && pointsMap.has(closest)) {
-    pointsMap.set(closest, pointsMap.get(closest) + 5);
-  }
+  // Bonus an besten Tipper
+  userPoints.forEach(u => {
+    if (u.user === closestUser) u.points += 5;
+  });
 
   // Punkte speichern
-  for (const [username, points] of pointsMap.entries()) {
-    const ref = doc(db, "burgies", username);
-    await setDoc(ref, { [eventId]: points }, { merge: true });
+  for (const u of userPoints) {
+    const ref = doc(db, "burgies", u.user);
+    const prev = await getDoc(ref);
+    const oldTotal = prev.exists() && prev.data().total ? prev.data().total : 0;
+
+    await setDoc(ref, {
+      [eventId]: u.points,
+      total: oldTotal + u.points
+    }, { merge: true });
   }
 }
 
