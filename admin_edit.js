@@ -129,6 +129,7 @@ async function calculateBurgies(eventId, actualValue) {
     await setDoc(doc(db, "burgies", user), {
       total: (await getDoc(doc(db, "burgies", user))).exists() 
         ? (await getDoc(doc(db, "burgies", user))).data().total + points
+        await calculateBurgies(id, parseFloat(actualWin));
         : points
     }, { merge: true });
   });
