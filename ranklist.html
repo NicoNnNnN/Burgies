@@ -1,34 +1,61 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Rangliste</title>
-  <link rel="stylesheet" href="style.css">
-  <script type="module" src="ranklist.js" defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rangliste – Burgies</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="ranklist.js"></script>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 1rem;
+    }
+    .ranking-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+    }
+    .ranking-table th, .ranking-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
+    .ranking-table th {
+      background-color: #111;
+      color: #ff4444;
+    }
+    .ranking-table td:first-child {
+      font-size: 1.2rem;
+    }
+    .highlight {
+      background-color: #222;
+    }
+  </style>
 </head>
 <body>
-  <nav style="background:#111; padding:1rem; text-align:center;">
-    <a href="home.html" style="margin:0 1rem; color:white; text-decoration:none;">🏠 Home</a>
-    <a href="events.html" style="margin:0 1rem; color:white; text-decoration:none;">📅 Events</a>
-    <a href="ranklist.html" style="margin:0 1rem; color:white; text-decoration:none;">🏆 Rangliste</a>
-    <a href="admin.html" style="margin:0 1rem; color:white; text-decoration:none;">🔒 Admin</a>
+  <nav class="menu">
+    <a href="home.html">Home</a>
+    <a href="events.html">Tippen</a>
+    <a href="ranklist.html">Rangliste</a>
+    <a href="admin.html">Admin</a>
   </nav>
 
-  <div class="container">
-    <h1 class="title">Rangliste</h1>
-    <p class="subtitle">Burgie-Rankings</p>
-
-    <div>
-      <label for="rankSelect">Zeige Rangliste für:</label>
-      <select id="rankSelect">
-        <option value="daily">Heute</option>
-        <option value="weekly">Diese Woche</option>
-        <option value="monthly">Diesen Monat</option>
-        <option value="total" selected>Gesamt</option>
-      </select>
-    </div>
-
-    <div id="rankingList" style="margin-top: 2rem;">Lade Rangliste...</div>
-  </div>
+  <h1>Rangliste</h1>
+  <table class="ranking-table" id="rankingTable">
+    <thead>
+      <tr>
+        <th>Platz</th>
+        <th>Benutzer</th>
+        <th>Burgies</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Dynamisch durch JavaScript gefüllt -->
+    </tbody>
+  </table>
 </body>
 </html>
