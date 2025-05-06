@@ -1,83 +1,75 @@
 body {
-  background-color: black;
-  color: white;
-  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  font-family: Arial, sans-serif;
+  background: black;
+  color: white;
 }
 
 nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 100%;
   background-color: #111;
-  padding: 1em;
-  text-align: center;
+  padding: 20px;
 }
 
 nav a {
+  display: block;
   color: white;
   text-decoration: none;
-  margin: 0 1em;
-  display: inline-block;
-}
-
-nav a.active {
-  color: red;
+  margin: 10px 0;
 }
 
 .container {
-  padding: 2em;
-  max-width: 600px;
-  margin: auto;
+  margin-left: 240px;
+  padding: 20px;
 }
 
-input,
-button {
-  margin: 0.5em 0;
-  padding: 0.75em;
-  width: 100%;
-  max-width: 100%;
-  font-size: 1em;
-  border-radius: 5px;
-  border: none;
+#greeting {
+  font-size: 1.5em;
+  margin-bottom: 10px;
 }
 
-button {
-  background-color: red;
-  color: white;
+.burgie-box {
+  background-color: #ff073a;
+  padding: 20px;
+  border-radius: 10px;
+  font-size: 2em;
   font-weight: bold;
-  cursor: pointer;
+  margin: 20px 0;
+  text-align: center;
+  box-shadow: 0 0 15px red;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
+.table-box {
+  background: #222;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 20px;
 }
 
-li {
-  margin-bottom: 1em;
-  background-color: #1a1a1a;
-  padding: 1em;
-  border-radius: 5px;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: white;
 }
 
-/* Responsive Anpassungen für mobile Geräte */
-@media (max-width: 768px) {
-  .container {
-    padding: 1em;
-  }
+th, td {
+  padding: 10px;
+  border: 1px solid #444;
+}
 
+@media screen and (max-width: 768px) {
   nav {
-    font-size: 0.9em;
-    padding: 0.5em;
+    width: 100%;
+    height: auto;
+    position: relative;
   }
 
-  nav a {
-    display: block;
-    margin: 0.5em 0;
-  }
-
-  input,
-  button {
-    font-size: 1em;
-    padding: 0.5em;
+  .container {
+    margin-left: 0;
   }
 }
