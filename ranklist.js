@@ -1,7 +1,9 @@
 import {
   getFirestore,
   collection,
-  getDocs
+  getDocs,
+  doc,
+  getDoc
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 
@@ -18,11 +20,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// Dropdown-Auswahl
 const select = document.getElementById("rankType");
 select.addEventListener("change", () => {
   loadRanking(select.value);
 });
 
+// Start mit daily
 loadRanking("daily");
 
 async function loadRanking(type) {
@@ -51,21 +55,16 @@ async function loadRanking(type) {
 
     for (const docSnap of snapshot.docs) {
       const username = docSnap.id;
-
       if (!username) continue;
 
       if (type === "total") {
-        const totalCol = collection(db, `burgies/${username}/total`);
-        const totalSnap = await getDocs(totalCol);
-        let totalPoints = 0;
-        totalSnap.forEach(doc => {
-          const data = doc.data();
-          if (data && typeof data.points === "number") {
-            totalPoints += data.points;
+        const totalRef = doc(db, `burgies/${username}/total/sum`);
+        const totalSnap = await getDoc(totalRef);
+        if (totalSnap.exists()) {
+          const data = totalSnap.data();
+          if (data && typeof data.points === "number" && data.points > 0) {
+            ranking.push({ username, points: data.points });
           }
-        });
-        if (totalPoints > 0) {
-          ranking.push({ username, points: totalPoints });
         }
       } else {
         const colRef = collection(db, `burgies/${username}/${type}`);
@@ -97,6 +96,7 @@ async function loadRanking(type) {
       `;
       tbody.appendChild(row);
     });
+
   } catch (error) {
     console.error("Fehler beim Laden der Rangliste:", error);
     const row = document.createElement("tr");
@@ -104,3 +104,4 @@ async function loadRanking(type) {
     tbody.appendChild(row);
   }
 }
+Stimmt das jetzt so 
