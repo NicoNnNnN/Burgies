@@ -1,34 +1,39 @@
+// home.js – Verknüpfung mit Firebase und Anzeige von Benutzerdaten
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import {
+  getFirestore,
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCW0-D2-mC43_HIimc_hfB1GoDqIILqg00",
-  authDomain: "burgies-34fca.firebaseapp.com",
-  projectId: "burgies-34fca",
-  storageBucket: "burgies-34fca.appspot.com",
-  messagingSenderId: "1089225214218",
-  appId: "1:1089225214218:web:c2b33c7fb58b0defb112f3",
-  measurementId: "G-3RJ1577EKL"
+  apiKey: "DEIN_API_KEY",
+  authDomain: "DEIN_AUTH_DOMAIN",
+  projectId: "DEIN_PROJECT_ID",
+  storageBucket: "DEIN_STORAGE_BUCKET",
+  messagingSenderId: "DEIN_MSG_SENDER_ID",
+  appId: "DEINE_APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Benutzername abfragen und anzeigen
-let username = localStorage.getItem("username");
-if (!username) {
-  username = prompt("Benutzernamen eingeben:");
-  localStorage.setItem("username", username);
-}
-document.getElementById("welcomeText").innerText = `Willkommen, ${username}!`;
+// Nutzername aus localStorage holen
+const username = localStorage.getItem("username") || "Gast";
 
-// Burgies anzeigen (Demo)
-const userDoc = doc(db, "users", username);
-getDoc(userDoc).then(docSnap => {
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    document.getElementById("burgies").innerText = data.burgies || 0;
+// Begrüßung anzeigen
+document.getElementById("greeting").innerText = `Willkommen zurück, ${username}!`;
+
+// Burgie-Anzeige aktualisieren
+async function showBurgies() {
+  const userRef = doc(db, "users", username);
+  const userSnap = await getDoc(userRef);
+  if (userSnap.exists()) {
+    const burgies = userSnap.data().burgies || 0;
+    document.getElementById("burgies").innerText = `${burgies} 🍔`;
   } else {
-    document.getElementById("burgies").innerText = "0";
+    document.getElementById("burgies").innerText = "0 🍔";
   }
-});
+}
+
+showBurgies();
