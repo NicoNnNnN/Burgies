@@ -1,198 +1,94 @@
 <!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Events – Burgies</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      background: #121212;
-      color: white;
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    .menu-button {
-      background-color: red;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      font-size: 20px;
-      cursor: pointer;
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      z-index: 1000;
-    }
-
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: -220px;
-      width: 200px;
-      height: 100%;
-      background-color: #1e1e1e;
-      padding-top: 60px;
-      transition: left 0.3s;
-      z-index: 999;
-    }
-
-    .sidebar.open {
-      left: 0;
-    }
-
-    .sidebar a {
-      display: block;
-      color: white;
-      padding: 16px;
-      text-decoration: none;
-    }
-
-    .sidebar a:hover,
-    .sidebar a.active {
-      background-color: #333;
-    }
-
-    .main {
-      padding: 80px 20px 20px 20px;
-    }
-
-    h1 {
-      margin-top: 0;
-      color: red;
-      transition: color 0.3s;
-    }
-
-    #filter {
-      margin: 1rem 0;
-      padding: 0.5rem;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: none;
-      background: #222;
-      color: white;
-    }
-
-    /* Stylische Event-Karten */
-    .event-card {
-      background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
-      padding: 1.5rem;
-      border-radius: 16px;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 0 12px rgba(255, 0, 0, 0.15);
-      transition: transform 0.2s;
-    }
-
-    .event-card:hover {
-      transform: scale(1.01);
-    }
-
-    .event-card h3 {
-      color: #ff4444;
-      font-size: 1.4rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .event-card p {
-      margin: 0.3rem 0;
-      font-size: 1rem;
-      color: #ddd;
-    }
-
-    .countdown {
-      font-weight: bold;
-      color: #ff8800;
-    }
-
-    .tip-section {
-      margin-top: 1rem;
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .tip-section input {
-      flex: 1;
-      padding: 0.5rem;
-      background: #222;
-      border: none;
-      color: white;
-      border-radius: 8px;
-    }
-
-    .tip-section button {
-      background: #ff4444;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .tip-section button:hover {
-      background: #ff0000;
-    }
-
-    .tipped-users {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: #aaa;
-      font-style: italic;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Hamburger-Menübutton -->
-  <button class="menu-button" onclick="toggleMenu()">☰</button>
-
-  <!-- Sidebar Navigation -->
-  <div class="sidebar" id="sidebar">
-    <a href="home.html">Home</a>
-    <a href="events.html" class="active">Tippen</a>
-    <a href="ranklist.html">Rangliste</a>
-    <a href="admin.html">Admin</a>
-  </div>
-
-  <!-- Hauptinhalt -->
-  <div class="main">
-    <h1 id="pageTitle">Hier kannst du tippen – Viel Glück!</h1>
-
-    <select id="filter">
-      <option value="upcoming">Anstehend</option>
-      <option value="past">Vergangen</option>
-    </select>
-
-    <div id="eventContainer">
-      <!-- Events werden hier dynamisch geladen -->
-    </div>
-  </div>
-
-  <!-- Menü + Titel-Animation -->
-  <script>
-    function toggleMenu() {
-      document.getElementById("sidebar").classList.toggle("open");
-    }
-
-    const title = document.getElementById("pageTitle");
-    const colors = ["yellow", "orange", "lime", "cyan", "red"];
-    let step = 0;
-
-    const blinkInterval = setInterval(() => {
-      title.style.color = colors[step];
-      step++;
-
-      if (step >= colors.length) {
-        clearInterval(blinkInterval);
-        title.style.color = "red";
-      }
-    }, 400);
-  </script>
-
-  <!-- JS: Events laden -->
-  <script type="module" src="events.js"></script>
-</body>
-</html>
+ <html lang="de">
+ <head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Events – Burgies</title>
+   <link rel="stylesheet" href="style.css" />
+   <style>
+     .event-card {
+       background: #1a1a1a;
+       padding: 1rem;
+       border-radius: 1rem;
+       margin-bottom: 1.5rem;
+       box-shadow: 0 0 10px #222;
+     }
+     .event-card h3 {
+       color: red;
+       margin-top: 0;
+     }
+     .event-card p {
+       margin: 0.3rem 0;
+     }
+     .event-card input[type="number"] {
+       width: 100%;
+       padding: 0.5rem;
+       margin-top: 0.5rem;
+       border-radius: 5px;
+       border: none;
+       background: #222;
+       color: white;
+     }
+     .event-card button {
+       background: red;
+       border: none;
+       padding: 0.5rem 1rem;
+       border-radius: 5px;
+       color: white;
+       font-weight: bold;
+       margin-top: 0.5rem;
+       cursor: pointer;
+     }
+     #filter {
+       margin-bottom: 1.5rem;
+       padding: 0.5rem;
+       font-size: 1rem;
+       border-radius: 5px;
+       border: none;
+       background: #222;
+       color: white;
+     }
+ 
+     .menu {
+       background: #111;
+       padding: 1rem;
+       display: flex;
+       gap: 1rem;
+     }
+ 
+     .menu a {
+       color: white;
+       text-decoration: none;
+       font-weight: bold;
+     }
+ 
+     .main {
+       padding: 2rem;
+     }
+   </style>
+ </head>
+ <body>
+   <nav class="menu">
+     <a href="home.html">Home</a>
+     <a href="events.html">Tippen</a>
+     <a href="ranklist.html">Rangliste</a>
+     <a href="admin.html">Admin</a>
+   </nav>
+ 
+   <div class="main">
+     <h1>Aktuelle Events</h1>
+     <select id="filter">
+       <option value="upcoming">Anstehend</option>
+       <option value="past">Vergangen</option>
+     </select>
+ 
+     <div id="eventsContainer">
+       <!-- Events werden hier dynamisch geladen -->
+     </div>
+   </div>
+ 
+   <!-- WICHTIG: JavaScript erst am Ende laden -->
+   <script type="module" src="events.js"></script>
+   <script type="module" src="events_final.js"></script>
+ </body>
+ </html>
