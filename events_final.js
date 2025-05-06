@@ -1,3 +1,4 @@
+// Firebase v10+ modular import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import {
   getFirestore,
@@ -8,7 +9,7 @@ import {
   getDoc
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-// Firebase-Init
+// Deine Firebase-Konfiguration
 const firebaseConfig = {
   apiKey: "AIzaSyCW0-D2-mC43_HIimc_hfB1GoDqIILqg00",
   authDomain: "burgies-34fca.firebaseapp.com",
@@ -18,44 +19,43 @@ const firebaseConfig = {
   appId: "1:1089225214218:web:c2b33c7fb58b0defb112f3"
 };
 
+// Initialisierung
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Benutzername holen
-const username = localStorage.getItem("username") || "Gast";
+// HTML-Zielcontainer & Username
 const container = document.getElementById("eventContainer");
+const username = localStorage.getItem("username") || "Gast";
 
-// Tipp erlaubt prüfen
+// Tippzeit prüfen
 function isTipAllowed(dateStr, timeStr) {
-  const eventTime = new Date(dateStr + "T" + timeStr);
-  const now = new Date();
-  const diff = eventTime - now;
-  return diff > 48 * 60 * 60 * 1000;
+  const eventTime = new Date(`${dateStr}T${timeStr}`);
+  return eventTime - new Date() > 48 * 60 * 60 * 1000;
 }
 
-// Countdown berechnen
+// Countdown-Anzeige
 function countdownText(dateStr, timeStr) {
-  const eventTime = new Date(dateStr + "T" + timeStr);
-  const now = new Date();
-  const diffMs = eventTime - now;
-  const hours = Math.floor(diffMs / 1000 / 60 / 60);
-  const minutes = Math.floor((diffMs / 1000 / 60) % 60);
-  return diffMs > 0 ? `${hours}h ${minutes}min` : "Event gestartet";
+  const eventTime = new Date(`${dateStr}T${timeStr}`);
+  const diffMs = eventTime - new Date();
+  if (diffMs <= 0) return "Event gestartet";
+  const hours = Math.floor(diffMs / (1000 * 60 * 60));
+  const minutes = Math.floor((diffMs / (1000 * 60)) % 60);
+  return `${hours}h ${minutes}min`;
 }
 
-// Events laden
+// Events laden & anzeigen
 async function loadEvents() {
   container.innerHTML = "";
-  const snapshot = await getDocs(collection(db, "events"));
   const now = new Date();
+  const snapshot = await getDocs(collection(db, "events"));
 
   snapshot.forEach(async (docSnap) => {
     const data = docSnap.data();
     const { title, date, time } = data;
     if (!title || !date || !time) return;
 
-    const eventDateTime = new Date(date + "T" + time);
-    if (eventDateTime < now) return; // Nur zukünftige Events
+    const eventDate = new Date(`${date}T${time}`);
+    if (eventDate < now) return; // Nur zukünftige Events anzeigen
 
     const tipRef = doc(db, "events", docSnap.id, "tips", username);
     const tipSnap = await getDoc(tipRef);
@@ -85,9 +85,9 @@ async function loadEvents() {
 
 // Tipp absenden
 window.submitTip = async function (eventId) {
-  const input = document.getElementById("tip-" + eventId);
+  const input = document.getElementById(`tip-${eventId}`);
   const value = parseFloat(input.value);
-  if (isNaN(value)) return alert("Bitte gib einen gültigen Tipp ein.");
+  if (isNaN(value)) return alert("Bitte gib einen gültigen Betrag ein.");
 
   const tipRef = doc(db, "events", eventId, "tips", username);
   await setDoc(tipRef, {
@@ -99,14 +99,14 @@ window.submitTip = async function (eventId) {
   loadEvents();
 };
 
-// Wer hat schon getippt?
+// Tipper anzeigen
 async function loadTippers(eventId) {
-  const tipListEl = document.getElementById("tipList-" + eventId);
-  const tipDocs = await getDocs(collection(db, "events", eventId, "tips"));
+  const tipListEl = document.getElementById(`tipList-${eventId}`);
+  const tipsSnap = await getDocs(collection(db, "events", eventId, "tips"));
   const names = [];
-  tipDocs.forEach(doc => names.push(doc.id));
-  tipListEl.innerHTML = `<strong>Schon getippt:</strong> ${names.length > 0 ? names.join(', ') : 'Niemand'}`;
+  tipsSnap.forEach(doc => names.push(doc.id));
+  tipListEl.innerHTML = `<strong>Schon getippt:</strong> ${names.length ? names.join(", ") : "Noch niemand"}`;
 }
 
-// Starte
+// Seite laden
 loadEvents();
