@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Adminbereich</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="admin.js" defer></script>
+</head>
+<body>
+  <nav style="background:#111; padding:1rem; text-align:center;">
+    <a href="home.html" style="margin:0 1rem; color:white; text-decoration:none;">🏠 Home</a>
+    <a href="events.html" style="margin:0 1rem; color:white; text-decoration:none;">📅 Events</a>
+    <a href="ranklist.html" style="margin:0 1rem; color:white; text-decoration:none;">🏆 Rangliste</a>
+    <a href="admin.html" style="margin:0 1rem; color:white; text-decoration:none;">🔒 Admin</a>
+  </nav>
+
+  <div class="container">
+    <h1 class="title">Adminbereich</h1>
+    <div id="loginSection">
+      <input type="password" id="adminPw" placeholder="Admin-Passwort">
+      <button onclick="checkAdminPassword()">Login</button>
+      <p id="loginMsg" style="color:red;"></p>
+    </div>
+
+    <div id="adminContent" style="display:none;">
+      <h2>Neues Event erstellen</h2>
+      <input type="text" id="eventTitle" placeholder="Eventtitel">
+      <input type="date" id="eventDate">
+      <input type="time" id="eventTime">
+      <button id="saveEvent">Event speichern</button>
+
+      <h2>Events verwalten</h2>
+      <div id="eventList">Lade Events...</div>
+
+      <h2>Spielerübersicht</h2>
+      <div id="userList">Lade Spieler...</div>
+    </div>
+  </div>
+</body>
+</html>
