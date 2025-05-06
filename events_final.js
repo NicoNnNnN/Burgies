@@ -42,7 +42,7 @@ function isTipAllowed(dateStr, timeStr) {
 
 async function loadEvents() {
   eventsContainer.innerHTML = "";
-  const snapshot = await getDocs(collection(db, "events"));
+  const snapshot = await getDocs(collection(db, "(default)", "events"));
   const filter = filterDropdown.value;
 
   snapshot.forEach(async (docSnap) => {
