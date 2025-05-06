@@ -9,7 +9,6 @@ import {
   updateDoc
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-// Firebase-Konfiguration
 const firebaseConfig = {
   apiKey: "AIzaSyCW0-D2-mC43_HIimc_hfB1GoDqIILqg00",
   authDomain: "burgies-34fca.firebaseapp.com",
@@ -19,20 +18,17 @@ const firebaseConfig = {
   appId: "1:1089225214218:web:c2b33c7fb58b0defb112f3"
 };
 
-// Firebase initialisieren
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Elemente aus dem DOM
 const eventForm = document.getElementById("eventForm");
 const eventList = document.getElementById("eventList");
 
 let editId = null;
 
-// Events laden
 async function loadEvents() {
   eventList.innerHTML = "";
-  const querySnapshot = await getDocs(collection(db, "events")); // <- Klein geschrieben!
+  const querySnapshot = await getDocs(collection(db, "events")); // << klein!
   querySnapshot.forEach((docSnap) => {
     const data = docSnap.data();
     const li = document.createElement("li");
@@ -45,7 +41,6 @@ async function loadEvents() {
   });
 }
 
-// Event speichern
 eventForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const title = document.getElementById("title").value;
@@ -53,28 +48,26 @@ eventForm.addEventListener("submit", async (e) => {
   const time = document.getElementById("time").value;
 
   if (editId) {
-    await updateDoc(doc(db, "events", editId), { title, date, time }); // <- Klein geschrieben!
+    await updateDoc(doc(db, "events", editId), { title, date, time }); // << klein!
     editId = null;
   } else {
-    await addDoc(collection(db, "events"), {  // <- Klein geschrieben!
+    await addDoc(collection(db, "events"), {
       title,
       date,
       time,
       createdAt: Date.now()
-    });
+    }); // << klein!
   }
 
   eventForm.reset();
   loadEvents();
 });
 
-// Event löschen
 window.deleteEvent = async (id) => {
-  await deleteDoc(doc(db, "events", id)); // <- Klein geschrieben!
+  await deleteDoc(doc(db, "events", id)); // << klein!
   loadEvents();
 };
 
-// Event bearbeiten vorbereiten
 window.editEvent = (id, title, date, time) => {
   document.getElementById("title").value = title;
   document.getElementById("date").value = date;
@@ -82,5 +75,4 @@ window.editEvent = (id, title, date, time) => {
   editId = id;
 };
 
-// Initial laden
 loadEvents();
