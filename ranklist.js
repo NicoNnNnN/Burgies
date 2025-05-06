@@ -31,58 +31,75 @@ async function loadRanking(type) {
   const tbody = document.getElementById("rankingTable").querySelector("tbody");
   tbody.innerHTML = "";
 
-  const snapshot = await getDocs(collection(db, "burgies"));
-  const ranking = [];
+  try {
+    const snapshot = await getDocs(collection(db, "burgies"));
+    const ranking = [];
 
-  const now = new Date();
-  let key = "";
+    const now = new Date();
+    let key = "";
 
-  if (type === "daily") {
-    key = now.toISOString().split("T")[0];
-  } else if (type === "weekly") {
-    const temp = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
-    const dayNum = temp.getUTCDay() || 7;
-    temp.setUTCDate(temp.getUTCDate() + 4 - dayNum);
-    const yearStart = new Date(Date.UTC(temp.getUTCFullYear(), 0, 1));
-    const weekNum = Math.ceil((((temp - yearStart) / 86400000) + 1) / 7);
-    key = `KW${weekNum.toString().padStart(2, "0")}-${now.getFullYear()}`;
-  } else if (type === "monthly") {
-    key = now.toISOString().slice(0, 7);
-  }
-
-  for (const docSnap of snapshot.docs) {
-    const username = docSnap.id;
-
-    if (type === "total") {
-      const totalCol = collection(db, `burgies/${username}/total`);
-      const totalSnap = await getDocs(totalCol);
-      let totalPoints = 0;
-      totalSnap.forEach(doc => {
-        totalPoints += doc.data().points || 0;
-      });
-      if (totalPoints > 0) {
-        ranking.push({ username, points: totalPoints });
-      }
-    } else {
-      const colRef = collection(db, `burgies/${username}/${type}`);
-      const subSnap = await getDocs(colRef);
-      subSnap.forEach(doc => {
-        if (doc.id === key && doc.data().points > 0) {
-          ranking.push({ username, points: doc.data().points });
-        }
-      });
+    if (type === "daily") {
+      key = now.toISOString().split("T")[0];
+    } else if (type === "weekly") {
+      const temp = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+      const dayNum = temp.getUTCDay() || 7;
+      temp.setUTCDate(temp.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(temp.getUTCFullYear(), 0, 1));
+      const weekNum = Math.ceil((((temp - yearStart) / 86400000) + 1) / 7);
+      key = `KW${weekNum.toString().padStart(2, "0")}-${now.getFullYear()}`;
+    } else if (type === "monthly") {
+      key = now.toISOString().slice(0, 7);
     }
-  }
 
-  ranking.sort((a, b) => b.points - a.points);
+    for (const docSnap of snapshot.docs) {
+      const username = docSnap.id;
 
-  ranking.forEach((entry, index) => {
+      if (type === "total") {
+        const totalCol = collection(db, `burgies/${username}/total`);
+        const totalSnap = await getDocs(totalCol);
+        let totalPoints = 0;
+        totalSnap.forEach(doc => {
+          const data = doc.data();
+          if (data && typeof data.points === "number") {
+            totalPoints += data.points;
+          }
+        });
+        if (totalPoints > 0) {
+          ranking.push({ username, points: totalPoints });
+        }
+      } else {
+        const colRef = collection(db, `burgies/${username}/${type}`);
+        const subSnap = await getDocs(colRef);
+        subSnap.forEach(doc => {
+          const data = doc.data();
+          if (doc.id === key && data && typeof data.points === "number" && data.points > 0) {
+            ranking.push({ username, points: data.points });
+          }
+        });
+      }
+    }
+
+    ranking.sort((a, b) => b.points - a.points);
+
+    ranking.forEach((entry, index) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${entry.username}</td>
+        <td>${entry.points}</td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    if (ranking.length === 0) {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td colspan="3">Keine Daten gefunden.</td>`;
+      tbody.appendChild(row);
+    }
+  } catch (error) {
+    console.error("Fehler beim Laden der Rangliste:", error);
     const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${index + 1}</td>
-      <td>${entry.username}</td>
-      <td>${entry.points}</td>
-    `;
+    row.innerHTML = `<td colspan="3">Fehler beim Laden der Daten.</td>`;
     tbody.appendChild(row);
-  });
+  }
 }
