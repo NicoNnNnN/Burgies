@@ -51,7 +51,7 @@ async function initUser() {
 }
 
 async function showBurgies() {
-  const userRef = doc(db, "users", username);
+  const userRef = doc(db, "burgies", username);
   const userSnap = await getDoc(userRef);
   if (userSnap.exists()) {
     const burgies = userSnap.data().burgies || 0;
