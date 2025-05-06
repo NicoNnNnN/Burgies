@@ -140,7 +140,6 @@ async function calculateBurgies(eventId, actual) {
   }
 }
 
-// Burgies nach Struktur speichern
 async function updateBurgies(username, punkte) {
   const now = new Date();
 
@@ -157,8 +156,8 @@ async function updateBurgies(username, punkte) {
   await updateOrCreate(`${basePath}/monthly/${monthlyKey}`, "points", punkte);
 }
 
-async function updateOrCreate(path, field, amount) {
-  const ref = doc(db, path);
+async function updateOrCreate(pathString, field, amount) {
+  const ref = doc(db, ...pathString.split("/"));
   const snap = await getDoc(ref);
   if (snap.exists()) {
     await updateDoc(ref, {
@@ -180,5 +179,4 @@ function getWeek(date) {
   return weekNum.toString().padStart(2, "0");
 }
 
-// Start
 loadEvents();
