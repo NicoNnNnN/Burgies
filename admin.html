@@ -1,40 +1,81 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Adminbereich</title>
-  <link rel="stylesheet" href="style.css">
-  <script type="module" src="admin.js" defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adminbereich – Burgies</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCW0-D2-mC43_HIimc_hfB1GoDqIILqg00",
+      authDomain: "burgies-34fca.firebaseapp.com",
+      projectId: "burgies-34fca",
+      storageBucket: "burgies-34fca.appspot.com",
+      messagingSenderId: "1089225214218",
+      appId: "1:1089225214218:web:c2b33c7fb58b0defb112f3",
+      measurementId: "G-3RJ1577EKL"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    document.getElementById("eventForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const title = document.getElementById("title").value;
+      const date = document.getElementById("date").value;
+      const time = document.getElementById("time").value;
+
+      await addDoc(collection(db, "events"), {
+        title,
+        date,
+        time,
+        createdAt: Date.now()
+      });
+
+      alert("Event wurde gespeichert.");
+      location.reload();
+    });
+
+    async function loadEvents() {
+      const snapshot = await getDocs(collection(db, "events"));
+      const list = document.getElementById("eventList");
+      list.innerHTML = "";
+      snapshot.forEach((docSnap) => {
+        const ev = docSnap.data();
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <strong>${ev.title}</strong> – ${ev.date} ${ev.time}
+          <input type="number" id="gewinn-${docSnap.id}" placeholder="Tatsächlicher Gewinn" style="margin-left:10px;width:150px;">
+          <button onclick="saveGewinn('${docSnap.id}')">Eintragen</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    window.saveGewinn = async function(id) {
+      const value = document.getElementById("gewinn-" + id).value;
+      if (!value) return alert("Bitte Gewinn eintragen.");
+
+      const ref = doc(db, "events", id);
+      await updateDoc(ref, { actual: Number(value) });
+      alert("Gewinn gespeichert!");
+    }
+
+    loadEvents();
+  </script>
 </head>
 <body>
-  <nav style="background:#111; padding:1rem; text-align:center;">
-    <a href="home.html" style="margin:0 1rem; color:white; text-decoration:none;">🏠 Home</a>
-    <a href="events.html" style="margin:0 1rem; color:white; text-decoration:none;">📅 Events</a>
-    <a href="ranklist.html" style="margin:0 1rem; color:white; text-decoration:none;">🏆 Rangliste</a>
-    <a href="admin.html" style="margin:0 1rem; color:white; text-decoration:none;">🔒 Admin</a>
-  </nav>
-
-  <div class="container">
-    <h1 class="title">Adminbereich</h1>
-    <div id="loginSection">
-      <input type="password" id="adminPw" placeholder="Admin-Passwort">
-      <button onclick="checkAdminPassword()">Login</button>
-      <p id="loginMsg" style="color:red;"></p>
-    </div>
-
-    <div id="adminContent" style="display:none;">
-      <h2>Neues Event erstellen</h2>
-      <input type="text" id="eventTitle" placeholder="Eventtitel">
-      <input type="date" id="eventDate">
-      <input type="time" id="eventTime">
-      <button id="saveEvent">Event speichern</button>
-
-      <h2>Events verwalten</h2>
-      <div id="eventList">Lade Events...</div>
-
-      <h2>Spielerübersicht</h2>
-      <div id="userList">Lade Spieler...</div>
-    </div>
-  </div>
+  <h1>Adminbereich</h1>
+  <form id="eventForm">
+    <input id="title" type="text" placeholder="Event-Titel" required />
+    <input id="date" type="date" required />
+    <input id="time" type="time" required />
+    <button type="submit">Event speichern</button>
+  </form>
+  <h2>Alle Events</h2>
+  <ul id="eventList"></ul>
 </body>
 </html>
