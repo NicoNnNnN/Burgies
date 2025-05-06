@@ -20,7 +20,7 @@ let editId = null;
 
 async function loadEvents() {
   eventList.innerHTML = "";
-  const querySnapshot = await getDocs(collection(db, "Events"));
+  const querySnapshot = await getDocs(collection(db, "events"));
   querySnapshot.forEach((docSnap) => {
     const data = docSnap.data();
     const li = document.createElement("li");
@@ -40,10 +40,10 @@ eventForm.addEventListener("submit", async (e) => {
   const time = document.getElementById("time").value;
 
   if (editId) {
-    await updateDoc(doc(db, "Events", editId), { title, date, time });
+    await updateDoc(doc(db, "events", editId), { title, date, time });
     editId = null;
   } else {
-    await addDoc(collection(db, "Events"), {
+    await addDoc(collection(db, "events"), {
       title,
       date,
       time,
@@ -56,7 +56,7 @@ eventForm.addEventListener("submit", async (e) => {
 });
 
 window.deleteEvent = async (id) => {
-  await deleteDoc(doc(db, "Events", id));
+  await deleteDoc(doc(db, "events", id));
   loadEvents();
 };
 
