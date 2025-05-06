@@ -76,3 +76,60 @@ window.editEvent = (id, title, date, time) => {
 };
 
 loadEvents();
+async function calculateBurgies(eventId, actualValue) {
+  const tipsRef = collection(db, "events", eventId, "tips");
+  const tipsSnapshot = await getDocs(tipsRef);
+
+  let closest = null;
+  let closestDiff = Infinity;
+
+  // Durch alle Tipps iterieren
+  tipsSnapshot.forEach((docSnap) => {
+    const data = docSnap.data();
+    const diff = Math.abs(data.value - actualValue);
+
+    // Besten Tipp merken
+    if (diff < closestDiff) {
+      closest = docSnap.id;
+      closestDiff = diff;
+    }
+  });
+
+  // Erneut durchgehen und Punkte berechnen
+  tipsSnapshot.forEach(async (docSnap) => {
+    const user = docSnap.id;
+    const data = docSnap.data();
+    const diff = Math.abs(data.value - actualValue);
+
+    let points = 0;
+
+    if (diff === 0) points = 50;
+    else if (diff <= 50) points = 45;
+    else if (diff <= 100) points = 40;
+    else if (diff <= 150) points = 35;
+    else if (diff <= 200) points = 30;
+    else if (diff <= 250) points = 25;
+    else if (diff <= 300) points = 20;
+    else if (diff <= 350) points = 15;
+    else if (diff <= 400) points = 10;
+    else if (diff <= 450) points = 8;
+    else if (diff <= 500) points = 6;
+    else if (diff <= 550) points = 5;
+    else if (diff <= 600) points = 4;
+    else if (diff <= 650) points = 3;
+    else if (diff <= 700) points = 2;
+    else if (diff <= 750) points = 1;
+
+    // Bonus für besten Tipp
+    if (user === closest) {
+      points += 5;
+    }
+
+    // In Firestore speichern
+    await setDoc(doc(db, "burgies", user), {
+      total: (await getDoc(doc(db, "burgies", user))).exists() 
+        ? (await getDoc(doc(db, "burgies", user))).data().total + points
+        : points
+    }, { merge: true });
+  });
+}
