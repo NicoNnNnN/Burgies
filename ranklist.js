@@ -37,7 +37,7 @@ async function loadRanking(type) {
     let key = "";
 
     if (type === "daily") {
-      key = now.toISOString().split("T")[0];
+      key = new Date().toLocaleDateString("sv-SE");
     } else if (type === "weekly") {
       const temp = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
       const dayNum = temp.getUTCDay() || 7;
@@ -46,7 +46,7 @@ async function loadRanking(type) {
       const weekNum = Math.ceil((((temp - yearStart) / 86400000) + 1) / 7);
       key = `KW${weekNum.toString().padStart(2, "0")}-${now.getFullYear()}`;
     } else if (type === "monthly") {
-      key = now.toISOString().slice(0, 7);
+      key = new Date().toLocaleDateString("sv-SE").slice(0, 7);
     }
 
     for (const docSnap of snapshot.docs) {
