@@ -18,13 +18,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Dropdown-Auswahl
 const select = document.getElementById("rankType");
 select.addEventListener("change", () => {
   loadRanking(select.value);
 });
 
-// Initial
 loadRanking("daily");
 
 async function loadRanking(type) {
@@ -54,6 +52,8 @@ async function loadRanking(type) {
     for (const docSnap of snapshot.docs) {
       const username = docSnap.id;
 
+      if (!username) continue;
+
       if (type === "total") {
         const totalCol = collection(db, `burgies/${username}/total`);
         const totalSnap = await getDocs(totalCol);
@@ -81,6 +81,13 @@ async function loadRanking(type) {
 
     ranking.sort((a, b) => b.points - a.points);
 
+    if (ranking.length === 0) {
+      const row = document.createElement("tr");
+      row.innerHTML = '<td colspan="3">Keine Ranglistendaten vorhanden.</td>';
+      tbody.appendChild(row);
+      return;
+    }
+
     ranking.forEach((entry, index) => {
       const row = document.createElement("tr");
       row.innerHTML = `
@@ -90,16 +97,10 @@ async function loadRanking(type) {
       `;
       tbody.appendChild(row);
     });
-
-    if (ranking.length === 0) {
-      const row = document.createElement("tr");
-      row.innerHTML = `<td colspan="3">Keine Daten gefunden.</td>`;
-      tbody.appendChild(row);
-    }
   } catch (error) {
     console.error("Fehler beim Laden der Rangliste:", error);
     const row = document.createElement("tr");
-    row.innerHTML = `<td colspan="3">Fehler beim Laden der Daten.</td>`;
+    row.innerHTML = '<td colspan="3">Fehler beim Laden der Rangliste.</td>';
     tbody.appendChild(row);
   }
 }
