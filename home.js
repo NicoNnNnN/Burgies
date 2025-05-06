@@ -27,14 +27,20 @@ const burgieEl = document.getElementById("burgies");
 
 async function initUser() {
   if (!username) {
-    username = prompt("Wie dürfen wir dich nennen?");
-    if (username) {
-      localStorage.setItem("username", username);
-      const userRef = doc(db, "users", username);
-      const userSnap = await getDoc(userRef);
-      if (!userSnap.exists()) {
-        await setDoc(userRef, { burgies: 0 });
-      }
+    async function showBurgies() {
+  const userRef = doc(db, "burgies", username);
+  const userSnap = await getDoc(userRef);
+  if (userSnap.exists()) {
+    const data = userSnap.data();
+    let total = 0;
+    Object.keys(data).forEach(key => {
+      if (key !== "total") total += data[key];
+    });
+    burgieEl.innerText = `${total} 🍔`;
+  } else {
+    burgieEl.innerText = "0 🍔";
+  }
+}
     } else {
       username = "Gast";
     }
