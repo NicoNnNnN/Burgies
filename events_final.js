@@ -84,7 +84,7 @@ window.submitTip = async function (eventId) {
   const value = parseFloat(input.value);
   if (isNaN(value)) return alert("Bitte gib einen gültigen Tipp ein.");
 
-  const tipRef = doc(db, "events", eventId, "tips", username);
+  const tipDocs = await getDocs(collection(db, "Events", eventId, "tips"));
   await setDoc(tipRef, {
     value,
     timestamp: new Date().toISOString()
