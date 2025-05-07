@@ -1,34 +1,3 @@
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  doc,
-  getDoc
-} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-
-// Firebase-Konfiguration
-const firebaseConfig = {
-  apiKey: "AIzaSyCW0-D2-mC43_HIimc_hfB1GoDqIILqg00",
-  authDomain: "burgies-34fca.firebaseapp.com",
-  projectId: "burgies-34fca",
-  storageBucket: "burgies-34fca.appspot.com",
-  messagingSenderId: "1089225214218",
-  appId: "1:1089225214218:web:c2b33c7fb58b0defb112f3"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// Dropdown-Auswahl
-const select = document.getElementById("rankType");
-select.addEventListener("change", () => {
-  loadRanking(select.value);
-});
-
-// Start mit daily
-loadRanking("daily");
-
 async function loadRanking(type) {
   const tbody = document.getElementById("rankingTable").querySelector("tbody");
   tbody.innerHTML = "";
@@ -41,7 +10,7 @@ async function loadRanking(type) {
     let key = "";
 
     if (type === "daily") {
-      key = new Date().toLocaleDateString("sv-SE");
+      key = now.toISOString().split("T")[0]; // z. B. "2025-05-07"
     } else if (type === "weekly") {
       const temp = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
       const dayNum = temp.getUTCDay() || 7;
@@ -50,7 +19,7 @@ async function loadRanking(type) {
       const weekNum = Math.ceil((((temp - yearStart) / 86400000) + 1) / 7);
       key = `KW${weekNum.toString().padStart(2, "0")}-${now.getFullYear()}`;
     } else if (type === "monthly") {
-      key = new Date().toLocaleDateString("sv-SE").slice(0, 7);
+      key = now.toISOString().slice(0, 7); // z. B. "2025-05"
     }
 
     for (const docSnap of snapshot.docs) {
@@ -71,12 +40,10 @@ async function loadRanking(type) {
         const subSnap = await getDocs(colRef);
         subSnap.forEach(doc => {
           const data = doc.data();
-         if (doc.id === key && data && typeof data.points === "number") {
-  const points = data.points;
-  if (points > 0) {
-    ranking.push({ username, points });
-  }
-}
+          const docId = doc.id.trim();
+          console.log(`Vergleich: ${username} → ${type}/${docId} vs. Key: ${key}`);
+          if (docId === key && data && typeof data.points === "number" && data.points > 0) {
+            ranking.push({ username, points: data.points });
           }
         });
       }
@@ -108,4 +75,3 @@ async function loadRanking(type) {
     tbody.appendChild(row);
   }
 }
-Stimmt das jetzt so 
