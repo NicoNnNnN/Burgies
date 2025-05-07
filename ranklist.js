@@ -71,8 +71,12 @@ async function loadRanking(type) {
         const subSnap = await getDocs(colRef);
         subSnap.forEach(doc => {
           const data = doc.data();
-          if (doc.id === key && data && typeof data.points === "number" && data.points > 0) {
-            ranking.push({ username, points: data.points });
+         if (doc.id === key && data && typeof data.points === "number") {
+  const points = data.points;
+  if (points > 0) {
+    ranking.push({ username, points });
+  }
+}
           }
         });
       }
