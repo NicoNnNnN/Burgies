@@ -25,18 +25,22 @@
       transition: transform 0.3s ease;
       z-index: 1000;
     }
+
     .sidebar.active {
       transform: translateX(0);
     }
+
     .sidebar a {
       display: block;
       color: #ccc;
       text-decoration: none;
       padding: 1rem;
     }
+
     .sidebar a:hover {
       color: red;
     }
+
     .menu-toggle {
       background: none;
       border: none;
@@ -51,11 +55,13 @@
       max-width: 600px;
       margin: 0 auto;
     }
+
     #greeting {
       font-size: 1.5rem;
       text-align: center;
       margin-bottom: 1rem;
     }
+
     .burgie-box {
       background-color: red;
       color: white;
@@ -66,19 +72,23 @@
       border-radius: 10px;
       margin-bottom: 2rem;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 1rem;
     }
+
     th, td {
       padding: 0.5rem;
       text-align: center;
       border: 1px solid #444;
     }
+
     th {
       background-color: #222;
     }
+
     h2, h3 {
       color: red;
     }
@@ -87,16 +97,20 @@
 </head>
 <body>
 
+  <!-- Menübutton -->
   <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+  <!-- Sidebar Navigation -->
   <div class="sidebar" id="sidebar">
     <a href="home.html">🏠 Home</a>
     <a href="events.html">📅 Events</a>
-    <a href="ranklist.html">🏆 Rangliste</a>
+    <a href="ranklist.html">🏆 Ranklist</a>
     <a href="admin.html">🔒 Admin</a>
   </div>
 
   <div class="content">
     <div id="greeting"></div>
+
     <div class="burgie-box">
       Du hast aktuell <span id="burgies">0</span> Burgies!
     </div>
@@ -141,7 +155,6 @@
         <tr><td>±750 €</td><td>1</td></tr>
       </tbody>
     </table>
-
   </div>
 
   <script>
