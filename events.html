@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events – Burgies</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: #121212;
+      color: white;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .menu-button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 20px;
+      cursor: pointer;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -220px;
+      width: 200px;
+      height: 100%;
+      background-color: #1e1e1e;
+      padding-top: 60px;
+      transition: left 0.3s;
+      z-index: 999;
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      padding: 16px;
+      text-decoration: none;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: #333;
+    }
+
+    .main {
+      padding: 80px 20px 20px 20px;
+    }
+
+    h1 {
+      margin-top: 0;
+      transition: color 0.3s;
+    }
+
+    #filter {
+      margin-bottom: 1.5rem;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+      background: #222;
+      color: white;
+    }
+
+    .event-card {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 10px #222;
+    }
+
+    .event-card h3 {
+      color: red;
+      margin-top: 0;
+    }
+
+    .event-card p {
+      margin: 0.3rem 0;
+    }
+
+    .event-card input[type="number"] {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      border: none;
+      background: #222;
+      color: white;
+    }
+
+    .event-card button {
+      background: red;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      margin-top: 0.5rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hamburger-Menübutton -->
+  <button class="menu-button" onclick="toggleMenu()">☰</button>
+
+  <!-- Slide-Menü -->
+  <div class="sidebar" id="sidebar">
+    <a href="home.html">Home</a>
+    <a href="events.html" class="active">Tippen</a>
+    <a href="ranklist.html">Rangliste</a>
+    <a href="admin.html">Admin</a>
+  </div>
+
+  <!-- Hauptinhalt -->
+  <div class="main">
+    <h1 id="eventHeadline">Eventliste – Viel Spaß beim Tippen!</h1>
+
+    <select id="filter">
+      <option value="upcoming">Anstehend</option>
+      <option value="past">Vergangen</option>
+    </select>
+
+    <div id="eventsContainer">
+      <!-- Events werden hier dynamisch geladen -->
+    </div>
+  </div>
+
+  <!-- Menü- und Überschrift-Logik -->
+  <script>
+    function toggleMenu() {
+      document.getElementById("sidebar").classList.toggle("open");
+    }
+
+    // Buntes Blinken der Überschrift
+    const title = document.getElementById("eventHeadline");
+    const blinkColors = ["yellow", "cyan", "lime", "orange", "red"];
+    let i = 0;
+
+    const blink = setInterval(() => {
+      title.style.color = blinkColors[i];
+      i++;
+      if (i >= blinkColors.length) {
+        clearInterval(blink);
+        title.style.color = "red";
+      }
+    }, 400);
+  </script>
+
+  <!-- JavaScript-Module -->
+  <script type="module" src="events.js"></script>
+  <script type="module" src="events_final.js"></script>
+</body>
+</html>

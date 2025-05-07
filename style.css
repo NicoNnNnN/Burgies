@@ -1,0 +1,75 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: black;
+  color: white;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 100%;
+  background-color: #111;
+  padding: 20px;
+}
+
+nav a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  margin: 10px 0;
+}
+
+.container {
+  margin-left: 240px;
+  padding: 20px;
+}
+
+#greeting {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.burgie-box {
+  background-color: #ff073a;
+  padding: 20px;
+  border-radius: 10px;
+  font-size: 2em;
+  font-weight: bold;
+  margin: 20px 0;
+  text-align: center;
+  box-shadow: 0 0 15px red;
+}
+
+.table-box {
+  background: #222;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: white;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #444;
+}
+
+@media screen and (max-width: 768px) {
+  nav {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .container {
+    margin-left: 0;
+  }
+}
